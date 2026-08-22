@@ -589,6 +589,12 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
 .foot a:hover{color:var(--gold-soft)}
 .foot .sm{color:var(--muted);font-size:13px}
 
+/* 그리드 칸 안의 넓은 요소가 화면을 밀어내지 않도록 */
+.pressure > *, .why > *, .live > *, .quarry-top > *, .invite > *, .scall .body > *,
+.grid-2 > *, .venues > *, .split > *, .thanks > *, .hall > *, .moments > *,
+.days > *, .guide > *, .pb > *, .draw > *, .foot > *{min-width:0}
+.holes,.sheet,.qholes-scroll,.holes-scroll,.growth{max-width:100%}
+
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -1393,13 +1399,7 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
         <figure class="w2"><img src="img/8b09af2306.jpg" alt="오크나무 아래 모여 선 참가자들" loading="lazy">
           <figcaption>경기 종료 후 클럽하우스 앞</figcaption></figure>
         <figure><img src="img/093d0f5e50.jpg" alt="상금 봉투를 전달받는 선수들" loading="lazy"></figure>
-        <figure><img src="img/3ffe454118.jpg" alt="시상식에서 기념 촬영하는 참가자들" loading="lazy">
-          <figcaption>여성부 시상</figcaption></figure>
-        <figure class="w2"><img src="img/86f74de862.jpg" alt="오크나무 아래 줄지어 선 골프 카트들" loading="lazy">
-          <figcaption>출발 전 클럽하우스 앞</figcaption></figure>
         <figure><img src="img/e957d8abca.jpg" alt="카트 앞에서 기념 촬영하는 선수들" loading="lazy"></figure>
-        <figure><img src="img/d5afd1086c.jpg" alt="대진표 보드 앞에서 상금을 전달받는 참가자들" loading="lazy">
-          <figcaption>대진표 앞에서</figcaption></figure>
         <figure><img src="img/8c1c84bd76.jpg" alt="트로피를 앞에 두고 상금을 전달받는 우승 팀" loading="lazy">
           <figcaption>결승전 시상</figcaption></figure>
         <figure><img src="img/b092de7aa3.jpg" alt="페어웨이에서 기념 촬영하는 두 사람" loading="lazy"></figure>
@@ -1413,8 +1413,6 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
           <figcaption>전 참가자 단체 사진</figcaption></figure>
         <figure class="w2"><img src="img/61a1c41748.jpg" alt="클럽하우스 앞 단체 사진" loading="lazy">
           <figcaption>클럽하우스 앞에서</figcaption></figure>
-        <figure><img src="img/e07e9c6a67.jpg" alt="트로피를 든 두 선수" loading="lazy">
-          <figcaption>우승 트로피와 함께</figcaption></figure>
         <figure><img src="img/1e612501f7.jpg" alt="트로피를 사이에 두고 선 두 선수" loading="lazy">
           <figcaption>우승 팀</figcaption></figure>
         <figure><img src="img/e41b7e8ff6.jpg" alt="트로피를 든 여성 선수들" loading="lazy">
@@ -1425,10 +1423,7 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
           <figcaption>일요일 만찬</figcaption></figure>
         <figure><img src="img/6fab8f248a.jpg" alt="그린에서 클럽을 들어 올리며 환호하는 선수" loading="lazy">
           <figcaption>퍼트가 떨어진 순간</figcaption></figure>
-        <figure><img src="img/5c29630e85.jpg" alt="깃대를 들어 올린 선수" loading="lazy">
-          <figcaption>홀아웃</figcaption></figure>
         <figure><img src="img/492bda840f.jpg" alt="결과가 채워진 대회 대진표 보드" loading="lazy"></figure>
-        <figure class="w2"><img src="img/5cee5ca694.jpg" alt="개회식을 마치고 코스에 모여 선 선수들" loading="lazy"></figure>
         <figure><img src="img/fa145fcd7c.jpg" alt="그린 위에서 기념 촬영하는 선수들" loading="lazy"></figure>
         <figure><img src="img/6d5e9530d0.jpg" alt="그린 위에서 기념 촬영하는 선수들" loading="lazy"></figure>
         <figure><img src="img/3a715b4963.jpg" alt="그린 위에서 기념 촬영하는 선수들" loading="lazy"></figure>
@@ -1906,18 +1901,15 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
   var btn  = document.getElementById('submit-btn');
   var msg  = document.getElementById('form-msg');
   if (!form) return;
-
   function say(kind, text){ msg.className = 'msg on ' + kind; msg.textContent = text; }
   function bad(m, id){ say('err', m); var el = document.getElementById(id); if (el) el.focus(); }
 
   form.addEventListener('submit', function(ev){
     ev.preventDefault();
     msg.className = 'msg';
-
     var fd = new FormData(form);
     var g = function(k){ return (fd.get(k) || '').toString().trim(); };
     var mail = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-
     var team = g('team'), div = g('div');
     var p1 = {n:g('p1name'), e:g('p1eng'), p:g('p1phone'), m:g('p1email'), h:g('p1hcp')};
     var p2 = {n:g('p2name'), e:g('p2eng'), p:g('p2phone'), m:g('p2email'), h:g('p2hcp')};
@@ -1932,38 +1924,25 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
     if (!mail.test(p2.m)){ bad('파트너의 이메일 주소를 다시 확인해 주세요.', 'p2-email'); return; }
     if (p1.n === p2.n){ bad('두 선수의 이름이 같습니다. 파트너 정보를 확인해 주세요.', 'p2-name'); return; }
 
-    var L = [];
-    L.push('Battle of Tampa Bay 2027 참가 신청');
-    L.push('');
-    L.push('소속 지역 · 팀 : ' + team);
-    L.push('참가 부문      : ' + div);
-    L.push('');
-    L.push('[ 선수 1 ]');
-    L.push('이름     : ' + p1.n);
+    var L = ['Battle of Tampa Bay 2027 참가 신청','',
+      '소속 지역 · 팀 : ' + team, '참가 부문      : ' + div, '', '[ 선수 1 ]',
+      '이름     : ' + p1.n];
     if (p1.e) L.push('영문명   : ' + p1.e);
-    L.push('연락처   : ' + p1.p);
-    L.push('이메일   : ' + p1.m);
+    L.push('연락처   : ' + p1.p, '이메일   : ' + p1.m);
     if (p1.h) L.push('핸디캡   : ' + p1.h);
-    L.push('');
-    L.push('[ 선수 2 · 파트너 ]');
-    L.push('이름     : ' + p2.n);
+    L.push('', '[ 선수 2 · 파트너 ]', '이름     : ' + p2.n);
     if (p2.e) L.push('영문명   : ' + p2.e);
-    L.push('연락처   : ' + p2.p);
-    L.push('이메일   : ' + p2.m);
+    L.push('연락처   : ' + p2.p, '이메일   : ' + p2.m);
     if (p2.h) L.push('핸디캡   : ' + p2.h);
     L.push('');
-    if (g('note')){ L.push('[ 요청 사항 ]'); L.push(g('note')); L.push(''); }
-    L.push('스폰서 · 후원 관심 : ' + (fd.get('sponsor') ? '예' : '아니오'));
-    L.push('');
-    L.push('— 이 신청서는 battletampabay.com 에서 작성되었습니다.');
+    if (g('note')){ L.push('[ 요청 사항 ]', g('note'), ''); }
+    L.push('스폰서 · 후원 관심 : ' + (fd.get('sponsor') ? '예' : '아니오'), '',
+           '— 이 신청서는 battletampabay.com 에서 작성되었습니다.');
 
     var subj = '[BOTB 2027 참가 신청] ' + p1.n + ' · ' + p2.n + ' (' + team + ')';
-    var href = 'mailto:goodohwithus@gmail.com?subject=' + encodeURIComponent(subj) +
-               '&body=' + encodeURIComponent(L.join('\n'));
-
     say('ok', p1.n + ' · ' + p2.n + ' 팀 — 메일 프로그램이 열립니다. 내용 확인 후 그대로 보내주시면 접수됩니다. 창이 열리지 않으면 goodohwithus@gmail.com 으로 직접 보내주세요.');
     btn.textContent = '메일 열기';
-    window.location.href = href;
+    window.location.href = 'mailto:goodohwithus@gmail.com?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(L.join('\n'));
   });
 })();
 
