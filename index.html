@@ -1530,6 +1530,10 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
                 <input id="p1-eng" name="p1eng" placeholder="Gil-dong Hong">
               </div>
               <div class="field">
+                <label for="p1-age">나이 <span class="req">*</span></label>
+                <input id="p1-age" name="p1age" type="number" inputmode="numeric" min="10" max="110" placeholder="55" required>
+              </div>
+              <div class="field">
                 <label for="p1-phone">연락처 <span class="req">*</span></label>
                 <input id="p1-phone" name="p1phone" type="tel" autocomplete="tel" placeholder="813-000-0000" required>
               </div>
@@ -1559,6 +1563,10 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
               <div class="field">
                 <label for="p2-eng">영문명 (스코어보드 표기)</label>
                 <input id="p2-eng" name="p2eng" placeholder="Chul-soo Kim">
+              </div>
+              <div class="field">
+                <label for="p2-age">나이 <span class="req">*</span></label>
+                <input id="p2-age" name="p2age" type="number" inputmode="numeric" min="10" max="110" placeholder="48" required>
               </div>
               <div class="field">
                 <label for="p2-phone">연락처 <span class="req">*</span></label>
@@ -1911,26 +1919,28 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
     var g = function(k){ return (fd.get(k) || '').toString().trim(); };
     var mail = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
     var team = g('team'), div = g('div');
-    var p1 = {n:g('p1name'), e:g('p1eng'), p:g('p1phone'), m:g('p1email'), h:g('p1hcp')};
-    var p2 = {n:g('p2name'), e:g('p2eng'), p:g('p2phone'), m:g('p2email'), h:g('p2hcp')};
+    var p1 = {n:g('p1name'), a:g('p1age'), e:g('p1eng'), p:g('p1phone'), m:g('p1email'), h:g('p1hcp')};
+    var p2 = {n:g('p2name'), a:g('p2age'), e:g('p2eng'), p:g('p2phone'), m:g('p2email'), h:g('p2hcp')};
 
     if (!team){ bad('소속 지역을 선택해 주세요.', 'f-team'); return; }
     if (!div){ bad('참가 부문을 선택해 주세요.', 'f-div'); return; }
     if (!p1.n){ bad('선수 1의 이름을 입력해 주세요.', 'p1-name'); return; }
+    if (!p1.a){ bad('선수 1의 나이를 입력해 주세요.', 'p1-age'); return; }
     if (!p1.p){ bad('선수 1의 연락처를 입력해 주세요.', 'p1-phone'); return; }
     if (!mail.test(p1.m)){ bad('선수 1의 이메일 주소를 다시 확인해 주세요.', 'p1-email'); return; }
     if (!p2.n){ bad('이 대회는 2인 1팀으로만 참가합니다. 파트너의 이름을 입력해 주세요.', 'p2-name'); return; }
+    if (!p2.a){ bad('파트너의 나이를 입력해 주세요.', 'p2-age'); return; }
     if (!p2.p){ bad('파트너의 연락처를 입력해 주세요.', 'p2-phone'); return; }
     if (!mail.test(p2.m)){ bad('파트너의 이메일 주소를 다시 확인해 주세요.', 'p2-email'); return; }
     if (p1.n === p2.n){ bad('두 선수의 이름이 같습니다. 파트너 정보를 확인해 주세요.', 'p2-name'); return; }
 
     var L = ['Battle of Tampa Bay 2027 참가 신청','',
       '소속 지역 · 팀 : ' + team, '참가 부문      : ' + div, '', '[ 선수 1 ]',
-      '이름     : ' + p1.n];
+      '이름     : ' + p1.n, '나이     : ' + p1.a];
     if (p1.e) L.push('영문명   : ' + p1.e);
     L.push('연락처   : ' + p1.p, '이메일   : ' + p1.m);
     if (p1.h) L.push('핸디캡   : ' + p1.h);
-    L.push('', '[ 선수 2 · 파트너 ]', '이름     : ' + p2.n);
+    L.push('', '[ 선수 2 · 파트너 ]', '이름     : ' + p2.n, '나이     : ' + p2.a);
     if (p2.e) L.push('영문명   : ' + p2.e);
     L.push('연락처   : ' + p2.p, '이메일   : ' + p2.m);
     if (p2.h) L.push('핸디캡   : ' + p2.h);
