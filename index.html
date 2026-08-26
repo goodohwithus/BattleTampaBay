@@ -1905,16 +1905,24 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
 
 <script>
 (function(){
+  /* ─────────────────────────────────────────────────────────────
+     접수 저장 주소 (구글 Apps Script 웹 앱 URL)
+     비어 있으면 메일 프로그램이 열리는 방식으로 동작합니다.
+     ───────────────────────────────────────────────────────────── */
+  var ENDPOINT = '';
+
   var form = document.getElementById('apply-form');
   var btn  = document.getElementById('submit-btn');
   var msg  = document.getElementById('form-msg');
   if (!form) return;
+
   function say(kind, text){ msg.className = 'msg on ' + kind; msg.textContent = text; }
   function bad(m, id){ say('err', m); var el = document.getElementById(id); if (el) el.focus(); }
 
   form.addEventListener('submit', function(ev){
     ev.preventDefault();
     msg.className = 'msg';
+
     var fd = new FormData(form);
     var g = function(k){ return (fd.get(k) || '').toString().trim(); };
     var mail = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -1934,6 +1942,35 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
     if (!mail.test(p2.m)){ bad('파트너의 이메일 주소를 다시 확인해 주세요.', 'p2-email'); return; }
     if (p1.n === p2.n){ bad('두 선수의 이름이 같습니다. 파트너 정보를 확인해 주세요.', 'p2-name'); return; }
 
+    var data = {
+      team: team, div: div,
+      p1name: p1.n, p1age: p1.a, p1eng: p1.e, p1phone: p1.p, p1email: p1.m, p1hcp: p1.h,
+      p2name: p2.n, p2age: p2.a, p2eng: p2.e, p2phone: p2.p, p2email: p2.m, p2hcp: p2.h,
+      note: g('note'), sponsor: (fd.get('sponsor') ? 'Y' : 'N')
+    };
+
+    if (ENDPOINT){
+      btn.disabled = true;
+      btn.textContent = '접수 중…';
+      var body = new URLSearchParams(data).toString();
+      fetch(ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body: body
+      }).then(function(){
+        form.reset();
+        btn.textContent = '접수 완료';
+        say('ok', p1.n + ' · ' + p2.n + ' 팀, 접수되었습니다. 3일 이내에 참가비 안내를 이메일로 보내드립니다. 확인 메일이 오지 않으면 goodohwithus@gmail.com 으로 문의해 주세요.');
+      }).catch(function(){
+        btn.disabled = false;
+        btn.textContent = '신청서 보내기';
+        say('err', '접수 중 문제가 생겼습니다. 잠시 후 다시 시도하시거나 goodohwithus@gmail.com 으로 신청 내용을 보내주세요.');
+      });
+      return;
+    }
+
+    /* 저장 주소가 없을 때 — 메일 프로그램으로 보내기 */
     var L = ['Battle of Tampa Bay 2027 참가 신청','',
       '소속 지역 · 팀 : ' + team, '참가 부문      : ' + div, '', '[ 선수 1 ]',
       '이름     : ' + p1.n, '나이     : ' + p1.a];
@@ -1945,12 +1982,11 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
     L.push('연락처   : ' + p2.p, '이메일   : ' + p2.m);
     if (p2.h) L.push('핸디캡   : ' + p2.h);
     L.push('');
-    if (g('note')){ L.push('[ 요청 사항 ]', g('note'), ''); }
-    L.push('스폰서 · 후원 관심 : ' + (fd.get('sponsor') ? '예' : '아니오'), '',
+    if (data.note){ L.push('[ 요청 사항 ]', data.note, ''); }
+    L.push('스폰서 · 후원 관심 : ' + (data.sponsor === 'Y' ? '예' : '아니오'), '',
            '— 이 신청서는 battletampabay.com 에서 작성되었습니다.');
-
     var subj = '[BOTB 2027 참가 신청] ' + p1.n + ' · ' + p2.n + ' (' + team + ')';
-    say('ok', p1.n + ' · ' + p2.n + ' 팀 — 메일 프로그램이 열립니다. 내용 확인 후 그대로 보내주시면 접수됩니다. 창이 열리지 않으면 goodohwithus@gmail.com 으로 직접 보내주세요.');
+    say('ok', p1.n + ' · ' + p2.n + ' 팀 — 메일 프로그램이 열립니다. 내용 확인 후 그대로 보내주시면 접수됩니다.');
     btn.textContent = '메일 열기';
     window.location.href = 'mailto:goodohwithus@gmail.com?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(L.join('\n'));
   });
