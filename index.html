@@ -84,7 +84,8 @@ a{color:var(--gold-soft);text-underline-offset:3px}
 .hero-veil{position:absolute;inset:0;background:
   radial-gradient(120% 80% at 20% 0%,rgba(5,15,30,.55),rgba(5,15,30,.94) 62%),
   linear-gradient(180deg,rgba(5,15,30,.55),var(--navy-950) 96%)}
-.hero-in{position:relative;display:grid;grid-template-columns:1.06fr .94fr;gap:44px;align-items:center;padding:74px 0 70px}
+.hero-in{position:relative;display:grid;grid-template-columns:1.06fr .94fr;gap:44px;align-items:center;padding:70px 0 58px}
+.poster{max-height:min(72vh,700px);width:auto;max-width:100%;margin-left:auto}
 @media (max-width:900px){.hero-in{grid-template-columns:1fr;gap:38px;padding:52px 0 56px}}
 .hero h1{font-family:"Cormorant Garamond",serif;font-size:clamp(46px,8.6vw,92px);line-height:.98;letter-spacing:-.015em;color:var(--gold);margin:14px 0 6px}
 .hero .kr{font-family:"Gowun Batang",serif;font-size:clamp(21px,3.6vw,32px);font-weight:700;letter-spacing:.06em}
@@ -101,7 +102,7 @@ a{color:var(--gold-soft);text-underline-offset:3px}
 @media (max-width:900px){.poster{max-width:520px;margin:0 auto}}
 
 /* facts strip */
-.facts{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);background:var(--navy-900)}
+.facts{position:relative;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);background:var(--navy-900)}
 .facts div{padding:22px 24px;border-right:1px solid var(--line)}
 .facts div:last-child{border-right:0}
 .facts .k{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
