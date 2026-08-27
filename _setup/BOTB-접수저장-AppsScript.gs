@@ -1,11 +1,15 @@
 /**
  * Battle of Tampa Bay 2027 — 참가 신청 접수 스크립트
+ * battletampabay.com 의 신청서 내용을 구글 시트에 한 줄씩 저장하고
+ * 주최측에 알림 메일을 보냅니다.
  *
- * battletampabay.com 의 신청서에서 보낸 내용을 이 스프레드시트에 한 줄씩 쌓습니다.
- * 구글 시트 > 확장 프로그램 > Apps Script 에 이 코드를 붙여넣고 배포하세요.
+ * 설치: 구글 시트 > 확장 프로그램 > Apps Script 에 붙여넣고
+ *       배포 > 새 배포 > 웹 앱 > 액세스 권한 "Anyone" 으로 배포하세요.
  */
 
-var SHEET_NAME = '참가 명단';
+var SHEET_ID   = '169eKPGDymsfGfdIksmnXmqZv9OOP0FQrU5A7cy7YWTM';
+var SHEET_NAME = '접수 명단';
+var NOTIFY_TO  = 'goodohwithus@gmail.com';
 
 var HEADERS = [
   '접수일시', '지역 · 팀', '부문',
@@ -20,7 +24,6 @@ function doPost(e) {
   try {
     var sheet = getSheet_();
     var p = (e && e.parameter) ? e.parameter : {};
-
     sheet.appendRow([
       new Date(),
       p.team || '', p.div || '',
@@ -29,7 +32,6 @@ function doPost(e) {
       p.note || '', (p.sponsor === 'Y' ? 'Y' : 'N'),
       '미납', '대기', ''
     ]);
-
     notify_(p);
     return json_({ ok: true });
   } catch (err) {
@@ -44,24 +46,22 @@ function doGet() {
 }
 
 function getSheet_() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = SpreadsheetApp.openById(SHEET_ID);
   var sheet = ss.getSheetByName(SHEET_NAME);
-  if (!sheet) {
-    sheet = ss.insertSheet(SHEET_NAME);
-  }
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(HEADERS);
-    var head = sheet.getRange(1, 1, 1, HEADERS.length);
-    head.setFontWeight('bold').setBackground('#0D2240').setFontColor('#FFFFFF');
+  if (!sheet) { sheet = ss.insertSheet(SHEET_NAME); }
+  var first = sheet.getRange(1, 1).getValue();
+  if (sheet.getLastRow() === 0 || first !== HEADERS[0]) {
+    if (sheet.getLastRow() > 0) { sheet.insertRowBefore(1); }
+    sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
+    sheet.getRange(1, 1, 1, HEADERS.length)
+         .setFontWeight('bold').setBackground('#0D2240').setFontColor('#FFFFFF');
     sheet.setFrozenRows(1);
   }
   return sheet;
 }
 
-/** 새 신청이 들어오면 주최측에 알림 메일을 보냅니다. */
 function notify_(p) {
   try {
-    var to = 'goodohwithus@gmail.com';
     var subject = '[BOTB 2027 신청] ' + (p.p1name || '') + ' · ' + (p.p2name || '') + ' (' + (p.team || '') + ')';
     var body =
       '새 팀이 등록했습니다.\n\n' +
@@ -72,16 +72,22 @@ function notify_(p) {
       '[선수 2] ' + (p.p2name || '') + ' / 만 ' + (p.p2age || '') + '세 / ' +
                     (p.p2phone || '') + ' / ' + (p.p2email || '') + ' / 핸디 ' + (p.p2hcp || '-') + '\n\n' +
       '요청 사항 : ' + (p.note || '없음') + '\n' +
-      '스폰서 관심 : ' + (p.sponsor === 'Y' ? '예' : '아니오') + '\n\n' +
-      '전체 명단은 구글 시트에서 확인하세요.';
-    MailApp.sendEmail(to, subject, body);
-  } catch (err) {
-    // 알림 실패해도 접수는 정상 처리합니다.
-  }
+      '스폰서 관심 : ' + (p.sponsor === 'Y' ? '예' : '아니오');
+    MailApp.sendEmail(NOTIFY_TO, subject, body);
+  } catch (err) {}
 }
 
 function json_(obj) {
-  return ContentService
-    .createTextOutput(JSON.stringify(obj))
+  return ContentService.createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+/* 설치 확인용 — 이 함수를 Run 하면 시트에 테스트 줄이 들어갑니다 */
+function 테스트() {
+  doPost({ parameter: {
+    team: 'FL · 플로리다', div: '남성부',
+    p1name: '테스트일', p1age: '50', p1phone: '000', p1email: 'test1@test.com', p1hcp: '6 – 10',
+    p2name: '테스트이', p2age: '50', p2phone: '000', p2email: 'test2@test.com', p2hcp: '11 – 15',
+    note: '설치 확인용', sponsor: 'N'
+  }});
 }
