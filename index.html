@@ -615,7 +615,7 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
       <a href="#guide">탬파 가이드</a>
       <a href="#thanks">후원</a>
     </span>
-    <span class="seat-chip">선착순 <b>24</b>개 팀</span>
+    <span class="seat-chip">잔여 <b id="seats-top">—</b>/24팀</span>
     <a class="btn btn-sm" href="#apply">선수 등록</a>
   </div>
 </nav>
@@ -1612,11 +1612,34 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
       </form>
     </div>
 
-    <div class="sunset" style="margin-top:26px">
-      <span>정원 <b>24개 팀 · 48명</b>. 접수 순서대로 배정되며 정원이 차면 마감합니다.</span>
-      <span style="color:var(--line);">|</span>
-      <span>접수 현황이 궁금하시면 <a href="mailto:goodohwithus@gmail.com">goodohwithus@gmail.com</a> 으로 문의해 주세요.</span>
+    <div class="meter"><i id="meter-fill"></i></div>
+    <div class="roster-bar">
+      <span class="c mono" id="roster-count">접수 현황을 불러오는 중…</span>
+      <span class="sp"></span>
+      <span class="pill mono">정원 24개 팀 · 48명</span>
     </div>
+
+    <div class="sheet">
+      <table>
+        <thead>
+          <tr>
+            <th class="num" style="width:56px">팀</th>
+            <th>선수 1</th>
+            <th>선수 2</th>
+            <th>지역 · 팀</th>
+            <th>부문</th>
+            <th class="num">접수일</th>
+          </tr>
+        </thead>
+        <tbody id="roster-body">
+          <tr><td colspan="6" class="empty">불러오는 중…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="sub" style="color:var(--muted);font-size:12.5px;margin-top:14px">
+      접수 순서대로 표시되며, 연락처는 공개되지 않습니다. 신청이 접수되면 이 표가 자동으로 갱신됩니다.
+    </p>
   </div>
 </section>
 
@@ -2015,6 +2038,55 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
   });
 })();
 
+
+/* ── 실시간 접수 현황 ───────────────────────────── */
+(function(){
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbzgrAn4mU-oV5aeoQ5pjs5v6SqNLmBfsE9_MjDVWjwtNG28_bmbiUbmewJKbVjeLLjiSA/exec';
+  var body  = document.getElementById('roster-body');
+  var count = document.getElementById('roster-count');
+  var fill  = document.getElementById('meter-fill');
+  var seats = document.getElementById('seats-top');
+  if (!body) return;
+
+  function esc(s){
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+  function dash(v){ return v ? esc(v) : '<span style="color:var(--muted)">—</span>'; }
+
+  function offline(){
+    body.innerHTML = '<tr><td colspan="6" class="empty">접수 현황을 불러오지 못했습니다. 문의 goodohwithus@gmail.com</td></tr>';
+    if (count) count.textContent = '정원 24개 팀 · 48명';
+  }
+
+  fetch(ENDPOINT, { method: 'GET' })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (!d || !d.ok || !d.teams) { offline(); return; }
+      var n = d.teams.length, cap = d.cap || 24, left = Math.max(0, cap - n);
+      if (seats) seats.textContent = String(left);
+      if (count) count.textContent = '등록 ' + n + '팀 · ' + (n * 2) + '명 · 잔여 ' + left + '팀';
+      if (fill)  fill.style.width = Math.min(100, (n / cap) * 100) + '%';
+
+      if (!n){
+        body.innerHTML = '<tr><td colspan="6" class="empty">아직 등록한 팀이 없습니다. 파트너와 함께 첫 팀으로 이름을 올려주세요.</td></tr>';
+        return;
+      }
+      var rows = '';
+      for (var i = 0; i < n; i++){
+        var t = d.teams[i];
+        rows += '<tr><td class="num">' + (i + 1) + '</td>' +
+                '<td><b style="font-weight:500">' + esc(t.p1) + '</b></td>' +
+                '<td><b style="font-weight:500">' + esc(t.p2) + '</b></td>' +
+                '<td>' + dash(t.team) + '</td>' +
+                '<td>' + dash(t.div) + '</td>' +
+                '<td class="num">' + dash(t.ts) + '</td></tr>';
+      }
+      body.innerHTML = rows;
+    })
+    .catch(offline);
+})();
 /* 골프 명언 슬라이드 */
 (function(){
   var stage = document.getElementById('q-stage');
