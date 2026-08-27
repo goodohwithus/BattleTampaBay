@@ -1910,7 +1910,7 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
      접수 저장 주소 (구글 Apps Script 웹 앱 URL)
      비어 있으면 메일 프로그램이 열리는 방식으로 동작합니다.
      ───────────────────────────────────────────────────────────── */
-  var ENDPOINT = '';
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbzo4TaWNCrhOR0kNRpj4nAfd5PMw88RywXGhf0o6z0y_KT9DhjUSv3Wlt_7k0S4z7GcCA/exec';
 
   var form = document.getElementById('apply-form');
   var btn  = document.getElementById('submit-btn');
@@ -1950,23 +1950,45 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
       note: g('note'), sponsor: (fd.get('sponsor') ? 'Y' : 'N')
     };
 
+    function mailFallback(reason){
+      var L = ['Battle of Tampa Bay 2027 참가 신청','',
+        '소속 지역 · 팀 : ' + team, '참가 부문      : ' + div, '', '[ 선수 1 ]',
+        '이름     : ' + p1.n, '나이     : ' + p1.a];
+      if (p1.e) L.push('영문명   : ' + p1.e);
+      L.push('연락처   : ' + p1.p, '이메일   : ' + p1.m);
+      if (p1.h) L.push('핸디캡   : ' + p1.h);
+      L.push('', '[ 선수 2 · 파트너 ]', '이름     : ' + p2.n, '나이     : ' + p2.a);
+      if (p2.e) L.push('영문명   : ' + p2.e);
+      L.push('연락처   : ' + p2.p, '이메일   : ' + p2.m);
+      if (p2.h) L.push('핸디캡   : ' + p2.h);
+      L.push('');
+      if (data.note){ L.push('[ 요청 사항 ]', data.note, ''); }
+      L.push('스폰서 · 후원 관심 : ' + (data.sponsor === 'Y' ? '예' : '아니오'), '',
+             '— 이 신청서는 battletampabay.com 에서 작성되었습니다.');
+      var subj = '[BOTB 2027 참가 신청] ' + p1.n + ' · ' + p2.n + ' (' + team + ')';
+      say('ok', reason + ' 메일 프로그램이 열립니다. 내용 확인 후 그대로 보내주시면 접수됩니다.');
+      btn.disabled = false;
+      btn.textContent = '메일 열기';
+      window.location.href = 'mailto:goodohwithus@gmail.com?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(L.join('\n'));
+    }
+
     if (ENDPOINT){
       btn.disabled = true;
       btn.textContent = '접수 중…';
-      var body = new URLSearchParams(data).toString();
       fetch(ENDPOINT, {
         method: 'POST',
-        mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-        body: body
-      }).then(function(){
-        form.reset();
-        btn.textContent = '접수 완료';
-        say('ok', p1.n + ' · ' + p2.n + ' 팀, 접수되었습니다. 3일 이내에 참가비 안내를 이메일로 보내드립니다. 확인 메일이 오지 않으면 goodohwithus@gmail.com 으로 문의해 주세요.');
+        body: new URLSearchParams(data).toString()
+      }).then(function(r){ return r.json(); }).then(function(res){
+        if (res && res.ok){
+          form.reset();
+          btn.textContent = '접수 완료';
+          say('ok', p1.n + ' · ' + p2.n + ' 팀, 접수되었습니다. 3일 이내에 참가비 안내를 이메일로 보내드립니다.');
+        } else {
+          mailFallback('접수 처리 중 문제가 있어');
+        }
       }).catch(function(){
-        btn.disabled = false;
-        btn.textContent = '신청서 보내기';
-        say('err', '접수 중 문제가 생겼습니다. 잠시 후 다시 시도하시거나 goodohwithus@gmail.com 으로 신청 내용을 보내주세요.');
+        mailFallback('접수 서버에 연결하지 못해');
       });
       return;
     }
