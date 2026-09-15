@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>접수 현황판 · Battle of Tampa Bay 2027</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%E2%9B%B3%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --navy-950:#050F1E; --navy-900:#08182C; --navy-800:#0D2240; --navy-700:#143054;
+  --line:#1D3A61; --gold:#D4AF37; --gold-soft:#EBD292; --ivory:#F2ECDE;
+  --muted:#93A7C4; --fair:#3E9B72; --alert:#DE7B62;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--navy-950);color:var(--ivory);
+  font-family:"Pretendard","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-size:15px;line-height:1.7;-webkit-text-size-adjust:100%}
+.mono{font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.wrap{max-width:1240px;margin:0 auto;padding:28px 18px 80px}
+
+/* ── 머리말 ── */
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:26px}
+.lock{width:38px;height:38px;flex:none;border-radius:10px;background:var(--navy-800);
+  border:1px solid var(--line);display:grid;place-items:center;font-size:17px}
+header h1{margin:0;font-size:19px;font-weight:600;letter-spacing:-.01em}
+header .sub{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+header .sp{flex:1 1 auto;min-width:8px}
+.badge{font-size:11.5px;color:var(--gold-soft);border:1px solid rgba(212,175,55,.3);
+  border-radius:999px;padding:5px 12px;white-space:nowrap}
+
+/* ── 버튼 ── */
+.btn{appearance:none;border:1px solid var(--line);background:var(--navy-800);color:var(--ivory);
+  border-radius:9px;padding:10px 17px;font-size:13.5px;font-family:inherit;cursor:pointer;
+  transition:.15s;white-space:nowrap}
+.btn:hover{border-color:var(--gold);color:var(--gold-soft)}
+.btn.pri{background:linear-gradient(180deg,#D4AF37,#B8912A);border-color:#D4AF37;color:#16233A;font-weight:600}
+.btn.pri:hover{filter:brightness(1.07);color:#16233A}
+.btn:disabled{opacity:.5;cursor:default}
+
+/* ── 잠금 화면 ── */
+#gate{max-width:420px;margin:70px auto;text-align:center}
+#gate .lockbig{font-size:38px;margin-bottom:14px}
+#gate h2{font-size:18px;font-weight:600;margin:0 0 6px}
+#gate p{color:var(--muted);font-size:13.5px;margin:0 0 24px}
+.krow{display:flex;gap:9px}
+input[type=password],input[type=text]{flex:1;min-width:0;background:var(--navy-900);
+  border:1px solid var(--line);border-radius:9px;color:var(--ivory);padding:12px 14px;
+  font-size:15px;font-family:inherit;outline:none}
+input:focus{border-color:var(--gold)}
+.err{color:var(--alert);font-size:13px;margin-top:14px;min-height:20px}
+
+/* ── 집계 카드 ── */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:12px}
+.cards>*{min-width:0}
+.card{background:linear-gradient(180deg,var(--navy-900),var(--navy-950));
+  border:1px solid var(--line);border-radius:13px;padding:17px 18px}
+.card .k{font-size:11.5px;color:var(--muted);letter-spacing:.06em}
+.card .v{font-size:27px;font-weight:600;color:var(--gold);margin-top:5px;line-height:1.2}
+.card .v small{font-size:14px;color:var(--muted);font-weight:400;margin-left:3px}
+
+.meter{height:7px;border-radius:99px;background:var(--navy-800);overflow:hidden;margin:18px 0 8px}
+.meter i{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,#B8912A,#EBD292);transition:width .7s ease}
+.mline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:24px}
+.mline .sp{flex:1 1 auto}
+
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:24px}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;
+  padding:6px 14px;font-size:12.5px;background:rgba(255,255,255,.02)}
+.chip b{color:var(--gold);font-weight:600}
+
+/* ── 표 ── */
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-bottom:14px}
+.toolbar .sp{flex:1 1 auto;min-width:8px}
+.sheet{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--navy-900)}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:900px}
+th{background:var(--navy-800);color:var(--gold-soft);font-weight:500;font-size:11.5px;
+  letter-spacing:.05em;text-align:left;padding:12px 13px;white-space:nowrap;
+  border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
+td{padding:13px;border-bottom:1px solid rgba(29,58,97,.5);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:rgba(212,175,55,.045)}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.nm{font-weight:500;color:var(--ivory)}
+.sm{font-size:11.5px;color:var(--muted);display:block;margin-top:2px}
+.dim{color:var(--muted)}
+a{color:var(--gold-soft);text-decoration:none}
+a:hover{text-decoration:underline}
+.tag{display:inline-block;font-size:11px;padding:3px 9px;border-radius:99px;
+  border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.tag.ok{color:var(--fair);border-color:rgba(62,155,114,.4)}
+.tag.wait{color:var(--gold-soft);border-color:rgba(212,175,55,.3)}
+.empty{text-align:center;color:var(--muted);padding:44px 16px}
+.warn{margin-top:22px;border:1px solid rgba(222,123,98,.32);background:rgba(222,123,98,.06);
+  border-radius:12px;padding:15px 17px;font-size:13px;color:#F0C9BE}
+.warn b{color:var(--alert);font-weight:600}
+.warn ul{margin:8px 0 0;padding-left:19px}
+.warn li{margin:4px 0}
+footer{margin-top:34px;color:var(--muted);font-size:12px;text-align:center;line-height:1.9}
+
+/* ── 모바일 ── */
+@media (max-width:640px){
+  .wrap{padding:20px 14px 60px}
+  header h1{font-size:17px}
+  .card .v{font-size:23px}
+  .toolbar .btn{flex:1 1 auto}
+}
+</style>
+</head>
+<body>
+
+<!-- ─────────── 잠금 화면 ─────────── -->
+<div id="gate">
+  <div class="lockbig">🔒</div>
+  <h2>접수 현황판</h2>
+  <p>Battle of Tampa Bay 2027 · 주최측 전용</p>
+  <form id="gate-form">
+    <div class="krow">
+      <input type="password" id="key" placeholder="열쇠를 입력하세요" autocomplete="current-password" autofocus>
+      <button class="btn pri" type="submit">열기</button>
+    </div>
+    <label style="display:block;margin-top:14px;font-size:12.5px;color:var(--muted);cursor:pointer">
+      <input type="checkbox" id="remember" checked style="vertical-align:-1px"> 이 기기에서 기억하기
+    </label>
+    <div class="err" id="gate-err"></div>
+  </form>
+</div>
+
+<!-- ─────────── 현황판 ─────────── -->
+<div class="wrap" id="board" style="display:none">
+  <header>
+    <div class="lock">⛳</div>
+    <div>
+      <h1>접수 현황판</h1>
+      <p class="sub">Battle of Tampa Bay 2027 · 2027. 1. 29 – 31 · Tampa, Florida</p>
+    </div>
+    <span class="sp"></span>
+    <span class="badge" id="updated">—</span>
+  </header>
+
+  <div class="cards">
+    <div class="card"><div class="k">접수 팀</div><div class="v"><span id="c-teams">—</span><small>팀</small></div></div>
+    <div class="card"><div class="k">참가 인원</div><div class="v"><span id="c-people">—</span><small>명</small></div></div>
+    <div class="card"><div class="k">잔여</div><div class="v"><span id="c-left">—</span><small>팀</small></div></div>
+    <div class="card"><div class="k">참가비 확인</div><div class="v"><span id="c-paid">—</span><small>팀</small></div></div>
+    <div class="card"><div class="k">차단된 스팸</div><div class="v"><span id="c-spam">—</span><small>건</small></div></div>
+  </div>
+
+  <div class="meter"><i id="meter"></i></div>
+  <div class="mline">
+    <span id="pct" class="mono">—</span>
+    <span class="sp"></span>
+    <span class="mono">정원 24개 팀 · 48명</span>
+  </div>
+
+  <div class="chips" id="chips"></div>
+
+  <div class="toolbar">
+    <button class="btn" id="refresh">새로 고침</button>
+    <button class="btn" id="csv">엑셀(CSV)로 내려받기</button>
+    <a class="btn" id="sheet" href="#" target="_blank" rel="noopener">구글 시트 열기</a>
+    <span class="sp"></span>
+    <button class="btn" id="logout">잠그기</button>
+  </div>
+
+  <div class="sheet">
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th class="num" style="width:48px">#</th>
+            <th>선수 1</th>
+            <th>선수 2</th>
+            <th>지역 · 팀</th>
+            <th>부문</th>
+            <th>핸디</th>
+            <th>요청 사항</th>
+            <th>참가비</th>
+            <th class="num">접수일</th>
+          </tr>
+        </thead>
+        <tbody id="rows">
+          <tr><td colspan="9" class="empty">불러오는 중…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="warn" id="warn" style="display:none"></div>
+
+  <footer>
+    이 화면에는 참가자의 연락처가 포함되어 있습니다. 화면을 공유하거나 캡처해서 전달하지 마세요.<br>
+    battletampabay.com · 문의 goodohwithus@gmail.com
+  </footer>
+</div>
+
+<script>
+(function(){
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbzgrAn4mU-oV5aeoQ5pjs5v6SqNLmBfsE9_MjDVWjwtNG28_bmbiUbmewJKbVjeLLjiSA/exec';
+  var KEYNAME  = 'botb27-admin-key';
+
+  var gate = document.getElementById('gate');
+  var board = document.getElementById('board');
+  var gerr = document.getElementById('gate-err');
+  var DATA = null;
+
+  function esc(s){
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+  function dash(v){ return v ? esc(v) : '<span class="dim">—</span>'; }
+  function tel(p){
+    p = String(p || '').replace(/[^0-9]/g,'');
+    return p ? '<a href="tel:' + p + '">' + esc(String(arguments[0])) + '</a>' : '';
+  }
+
+  /* ── 열쇠 ── */
+  function saved(){
+    try { return localStorage.getItem(KEYNAME) || ''; } catch(e){ return ''; }
+  }
+  function remember(k){
+    try { localStorage.setItem(KEYNAME, k); } catch(e){}
+  }
+  function forget(){
+    try { localStorage.removeItem(KEYNAME); } catch(e){}
+  }
+
+  document.getElementById('gate-form').addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var k = document.getElementById('key').value.trim();
+    if (!k){ gerr.textContent = '열쇠를 입력해 주세요.'; return; }
+    gerr.textContent = '확인 중…';
+    load(k, document.getElementById('remember').checked);
+  });
+
+  document.getElementById('logout').addEventListener('click', function(){
+    forget();
+    location.reload();
+  });
+
+  document.getElementById('refresh').addEventListener('click', function(){
+    var k = saved() || window.__k;
+    if (k) load(k, false, true);
+  });
+
+  /* ── 불러오기 ── */
+  function load(key, doRemember, quiet){
+    var btn = document.getElementById('refresh');
+    if (quiet && btn){ btn.disabled = true; btn.textContent = '불러오는 중…'; }
+
+    fetch(ENDPOINT + '?key=' + encodeURIComponent(key) + '&t=' + Date.now())
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if (!d || !d.ok || !d.admin){
+          if (quiet){ gerr.textContent = ''; }
+          gerr.textContent = '열쇠가 맞지 않습니다. 다시 확인해 주세요.';
+          if (btn){ btn.disabled = false; btn.textContent = '새로 고침'; }
+          return;
+        }
+        window.__k = key;
+        if (doRemember) remember(key);
+        DATA = d;
+        gate.style.display = 'none';
+        board.style.display = 'block';
+        render(d);
+        if (btn){ btn.disabled = false; btn.textContent = '새로 고침'; }
+      })
+      .catch(function(){
+        gerr.textContent = '접수 서버에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.';
+        if (btn){ btn.disabled = false; btn.textContent = '새로 고침'; }
+      });
+  }
+
+  /* ── 그리기 ── */
+  function render(d){
+    var rows = d.rows || [], n = rows.length, cap = d.cap || 24;
+    var paid = 0;
+    for (var i = 0; i < n; i++){
+      if (/납부|완납|입금|Y|확인/i.test(String(rows[i].fee))) paid++;
+    }
+    document.getElementById('c-teams').textContent  = n;
+    document.getElementById('c-people').textContent = n * 2;
+    document.getElementById('c-left').textContent   = Math.max(0, cap - n);
+    document.getElementById('c-paid').textContent   = paid;
+    document.getElementById('c-spam').textContent   = d.spam || 0;
+    document.getElementById('meter').style.width    = Math.min(100, (n / cap) * 100) + '%';
+    document.getElementById('pct').textContent      = '정원의 ' + Math.round((n / cap) * 100) + '% 접수';
+    document.getElementById('sheet').href           = d.sheetUrl || '#';
+
+    var now = new Date();
+    document.getElementById('updated').textContent =
+      now.getFullYear() + '. ' + (now.getMonth() + 1) + '. ' + now.getDate() + ' ' +
+      ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2) + ' 기준';
+
+    /* 집계 칩 */
+    var ch = '', k;
+    for (k in (d.divs || {})) ch += '<span class="chip">' + esc(k) + ' <b>' + d.divs[k] + '팀</b></span>';
+    for (k in (d.regions || {})) ch += '<span class="chip dim">' + esc(k) + ' <b>' + d.regions[k] + '</b></span>';
+    document.getElementById('chips').innerHTML = ch;
+
+    /* 표 */
+    var body = document.getElementById('rows');
+    if (!n){
+      body.innerHTML = '<tr><td colspan="9" class="empty">아직 접수된 팀이 없습니다.</td></tr>';
+      document.getElementById('warn').style.display = 'none';
+      return;
+    }
+    var html = '';
+    for (i = 0; i < n; i++){
+      var r = rows[i];
+      html += '<tr>' +
+        '<td class="num dim">' + (i + 1) + '</td>' +
+        '<td>' + player(r.p1) + '</td>' +
+        '<td>' + player(r.p2) + '</td>' +
+        '<td>' + dash(r.team) + '</td>' +
+        '<td>' + dash(r.div) + '</td>' +
+        '<td class="dim" style="font-size:12px">' + dash(r.p1.h) + '<span class="sm">' + esc(r.p2.h || '—') + '</span></td>' +
+        '<td style="max-width:220px;font-size:12.5px" class="dim">' + dash(r.note) +
+          (r.sponsor === 'Y' ? '<span class="sm" style="color:var(--gold-soft)">스폰서 관심</span>' : '') + '</td>' +
+        '<td>' + feeTag(r.fee) + '</td>' +
+        '<td class="num dim" style="font-size:12px;white-space:nowrap">' + esc(String(r.ts).split(' ')[0]) + '</td>' +
+      '</tr>';
+    }
+    body.innerHTML = html;
+    checks(rows);
+  }
+
+  function player(p){
+    var out = '<span class="nm">' + esc(p.n || '—') + '</span>';
+    var line2 = [];
+    if (p.a) line2.push('만 ' + esc(p.a) + '세');
+    if (p.e) line2.push(esc(p.e));
+    if (line2.length) out += '<span class="sm">' + line2.join(' · ') + '</span>';
+    if (p.p){
+      var digits = String(p.p).replace(/[^0-9]/g,'');
+      out += '<span class="sm"><a href="tel:' + digits + '">' + esc(p.p) + '</a></span>';
+    }
+    if (p.m) out += '<span class="sm"><a href="mailto:' + esc(p.m) + '">' + esc(p.m) + '</a></span>';
+    return out;
+  }
+
+  function feeTag(f){
+    f = String(f || '').trim();
+    if (!f) return '<span class="tag">—</span>';
+    if (/납부|완납|입금|확인/.test(f)) return '<span class="tag ok">' + esc(f) + '</span>';
+    return '<span class="tag wait">' + esc(f) + '</span>';
+  }
+
+  /* ── 확인이 필요한 항목 ── */
+  function checks(rows){
+    var items = [];
+    for (var i = 0; i < rows.length; i++){
+      var r = rows[i], who = (r.p1.n || '') + ' · ' + (r.p2.n || '');
+      if (!r.p1.a || !r.p2.a) items.push(who + ' — 나이 미기재');
+      if (r.p1.m && r.p1.m === r.p2.m) items.push(who + ' — 두 선수 이메일이 같음');
+      if (/gmai\.com|gmial\.com|gmail\.co$|hotmial/i.test(r.p1.m + ' ' + r.p2.m))
+        items.push(who + ' — 이메일 오타로 보임');
+      if (!r.p1.h || !r.p2.h) items.push(who + ' — 핸디캡 미기재');
+      if (/기타/.test(r.team)) items.push(who + ' — 소속 지역이 "기타"');
+    }
+    var box = document.getElementById('warn');
+    if (!items.length){ box.style.display = 'none'; return; }
+    var li = '';
+    for (i = 0; i < items.length; i++) li += '<li>' + esc(items[i]) + '</li>';
+    box.innerHTML = '<b>확인이 필요한 항목 ' + items.length + '건</b><ul>' + li + '</ul>';
+    box.style.display = 'block';
+  }
+
+  /* ── CSV 내려받기 ── */
+  document.getElementById('csv').addEventListener('click', function(){
+    if (!DATA || !DATA.rows) return;
+    var H = ['No','접수일시','지역·팀','부문',
+      '선수1 이름','선수1 나이','선수1 영문명','선수1 연락처','선수1 이메일','선수1 핸디',
+      '선수2 이름','선수2 나이','선수2 영문명','선수2 연락처','선수2 이메일','선수2 핸디',
+      '요청 사항','스폰서','참가비','확정','메모'];
+    function q(v){ return '"' + String(v == null ? '' : v).replace(/"/g,'""') + '"'; }
+    var L = [H.map(q).join(',')];
+    DATA.rows.forEach(function(r, i){
+      L.push([i + 1, r.ts, r.team, r.div,
+        r.p1.n, r.p1.a, r.p1.e, r.p1.p, r.p1.m, r.p1.h,
+        r.p2.n, r.p2.a, r.p2.e, r.p2.p, r.p2.m, r.p2.h,
+        r.note, r.sponsor, r.fee, r.status, r.memo].map(q).join(','));
+    });
+    /* 엑셀에서 한글이 깨지지 않도록 BOM 을 붙입니다 */
+    var blob = new Blob(['﻿' + L.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+    var a = document.createElement('a');
+    var d = new Date();
+    a.href = URL.createObjectURL(blob);
+    a.download = 'BOTB2027-접수명단-' + d.getFullYear() +
+                 ('0' + (d.getMonth() + 1)).slice(-2) + ('0' + d.getDate()).slice(-2) + '.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+  });
+
+  /* ── 기억해 둔 열쇠가 있으면 바로 열기 ── */
+  var k0 = saved();
+  if (k0) load(k0, false);
+})();
+</script>
+</body>
+</html>

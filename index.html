@@ -526,6 +526,7 @@ option{background:var(--navy-800)}
   display:grid;place-items:center;font-family:"IBM Plex Mono",monospace;font-size:11px}
 .player .ph .t{font-family:"Gowun Batang",serif;font-size:15.5px;font-weight:700}
 .player .ph .s{font-size:11px;color:var(--muted);margin-left:auto;font-family:"IBM Plex Mono",monospace;letter-spacing:.08em}
+.hp-wrap{position:absolute!important;left:-9999px!important;top:auto!important;width:1px!important;height:1px!important;overflow:hidden!important}
 .pair-note{grid-column:1/-1;border-left:2px solid var(--gold);padding:2px 0 2px 15px;font-size:13.5px;color:var(--muted);line-height:1.7}
 .pair-note b{color:var(--gold-soft)}
 .form-note{font-size:12.5px;color:var(--muted);flex:1;min-width:220px;line-height:1.65}
@@ -1486,6 +1487,10 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
 
       <form id="apply-form" novalidate>
         <div class="form-body">
+          <div class="hp-wrap" aria-hidden="true">
+            <label for="f-website">Website</label>
+            <input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off">
+          </div>
           <p class="pair-note">
             이 대회는 <b>2인 1팀으로만 참가</b>합니다. 파트너 두 분의 정보를 함께 입력하셔야 접수가 완료되며,
             한 분만 등록하실 수는 없습니다. 파트너를 아직 정하지 못하셨다면 소속 지역 회장님께 먼저 문의해 주세요.
@@ -1604,8 +1609,8 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
 
         <div class="form-foot">
           <p class="form-note">
-            등록 명단에는 <b>두 선수의 이름 · 지역 · 부문</b>만 표시되며 연락처와 이메일은 공개되지 않습니다.
-            아래 버튼을 누르면 입력하신 내용이 담긴 이메일이 열립니다. 그대로 보내주시면 접수됩니다.
+            입력하신 성함과 연락처는 <b>대회 운영 목적으로만 사용</b>되며 웹사이트에 공개되지 않습니다.
+            접수가 완료되면 확인 메일을 보내드립니다. 시드는 금요일 시드 결정전 성적으로 결정되며, 팀 구성은 등록하신 그대로 유지됩니다.
           </p>
           <button class="btn" type="submit" id="submit-btn">신청서 보내기</button>
         </div>
@@ -1619,26 +1624,11 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
       <span class="pill mono">정원 24개 팀 · 48명</span>
     </div>
 
-    <div class="sheet">
-      <table>
-        <thead>
-          <tr>
-            <th class="num" style="width:56px">팀</th>
-            <th>선수 1</th>
-            <th>선수 2</th>
-            <th>지역 · 팀</th>
-            <th>부문</th>
-            <th class="num">접수일</th>
-          </tr>
-        </thead>
-        <tbody id="roster-body">
-          <tr><td colspan="6" class="empty">불러오는 중…</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <div id="div-summary" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:18px"></div>
 
-    <p class="sub" style="color:var(--muted);font-size:12.5px;margin-top:14px">
-      접수 순서대로 표시되며, 연락처는 공개되지 않습니다. 신청이 접수되면 이 표가 자동으로 갱신됩니다.
+    <p class="sub" style="color:var(--muted);font-size:12.5px;margin-top:16px;line-height:1.8">
+      참가 선수의 성함과 연락처는 <b style="color:var(--gold-soft);font-weight:500">공개하지 않습니다.</b>
+      접수 현황은 신청이 들어올 때마다 자동으로 갱신됩니다.
     </p>
   </div>
 </section>
@@ -1940,6 +1930,10 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
   var msg  = document.getElementById('form-msg');
   if (!form) return;
 
+  /* 스팸 차단 — 페이지가 열린 시각 기록 + 폼 토큰 */
+  var OPENED = Date.now();
+  var TOKEN  = 'botb27-' + (27 * 29).toString(36);
+
   function say(kind, text){ msg.className = 'msg on ' + kind; msg.textContent = text; }
   function bad(m, id){ say('err', m); var el = document.getElementById(id); if (el) el.focus(); }
 
@@ -1966,7 +1960,11 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
     if (!mail.test(p2.m)){ bad('파트너의 이메일 주소를 다시 확인해 주세요.', 'p2-email'); return; }
     if (p1.n === p2.n){ bad('두 선수의 이름이 같습니다. 파트너 정보를 확인해 주세요.', 'p2-name'); return; }
 
+    /* 자동 등록(봇) 차단 — 사람에게는 보이지 않는 칸이 채워졌거나 너무 빨리 제출된 경우 */
+    if (g('website')){ say('ok', '접수되었습니다.'); form.reset(); btn.disabled = true; return; }
+
     var data = {
+      hp: g('website'), tk: TOKEN, el: String(Date.now() - OPENED),
       team: team, div: div,
       p1name: p1.n, p1age: p1.a, p1eng: p1.e, p1phone: p1.p, p1email: p1.m, p1hcp: p1.h,
       p2name: p2.n, p2age: p2.a, p2eng: p2.e, p2phone: p2.p, p2email: p2.m, p2hcp: p2.h,
@@ -2039,51 +2037,53 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
 })();
 
 
-/* ── 실시간 접수 현황 ───────────────────────────── */
+/* ── 실시간 접수 현황 (숫자만 공개 · 명단 비공개) ───────────── */
 (function(){
   var ENDPOINT = 'https://script.google.com/macros/s/AKfycbzgrAn4mU-oV5aeoQ5pjs5v6SqNLmBfsE9_MjDVWjwtNG28_bmbiUbmewJKbVjeLLjiSA/exec';
-  var body  = document.getElementById('roster-body');
   var count = document.getElementById('roster-count');
   var fill  = document.getElementById('meter-fill');
   var seats = document.getElementById('seats-top');
-  if (!body) return;
+  var sum   = document.getElementById('div-summary');
+  if (!count && !sum) return;
 
   function esc(s){
     return String(s == null ? '' : s)
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
       .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
-  function dash(v){ return v ? esc(v) : '<span style="color:var(--muted)">—</span>'; }
+
+  function chip(label, n){
+    return '<span style="display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);' +
+           'border-radius:999px;padding:7px 15px;background:rgba(255,255,255,.02);font-size:13px">' +
+           '<b style="font-weight:500;color:var(--ivory)">' + esc(label) + '</b>' +
+           '<b style="font-weight:600;color:var(--gold)">' + n + '</b></span>';
+  }
 
   function offline(){
-    body.innerHTML = '<tr><td colspan="6" class="empty">접수 현황을 불러오지 못했습니다. 문의 goodohwithus@gmail.com</td></tr>';
     if (count) count.textContent = '정원 24개 팀 · 48명';
   }
 
   fetch(ENDPOINT, { method: 'GET' })
     .then(function(r){ return r.json(); })
     .then(function(d){
-      if (!d || !d.ok || !d.teams) { offline(); return; }
-      var n = d.teams.length, cap = d.cap || 24, left = Math.max(0, cap - n);
+      if (!d || !d.ok) { offline(); return; }
+      var n = d.count || 0, cap = d.cap || 24, left = Math.max(0, cap - n);
       if (seats) seats.textContent = String(left);
       if (count) count.textContent = '등록 ' + n + '팀 · ' + (n * 2) + '명 · 잔여 ' + left + '팀';
       if (fill)  fill.style.width = Math.min(100, (n / cap) * 100) + '%';
 
+      if (!sum) return;
       if (!n){
-        body.innerHTML = '<tr><td colspan="6" class="empty">아직 등록한 팀이 없습니다. 파트너와 함께 첫 팀으로 이름을 올려주세요.</td></tr>';
+        sum.innerHTML = '<span style="color:var(--muted);font-size:13px">' +
+          '아직 등록한 팀이 없습니다. 파트너와 함께 첫 팀으로 이름을 올려주세요.</span>';
         return;
       }
-      var rows = '';
-      for (var i = 0; i < n; i++){
-        var t = d.teams[i];
-        rows += '<tr><td class="num">' + (i + 1) + '</td>' +
-                '<td><b style="font-weight:500">' + esc(t.p1) + '</b></td>' +
-                '<td><b style="font-weight:500">' + esc(t.p2) + '</b></td>' +
-                '<td>' + dash(t.team) + '</td>' +
-                '<td>' + dash(t.div) + '</td>' +
-                '<td class="num">' + dash(t.ts) + '</td></tr>';
-      }
-      body.innerHTML = rows;
+      var html = '', divs = d.divs || {}, k;
+      for (k in divs){ if (divs[k]) html += chip(k, divs[k] + '팀'); }
+      var regions = d.regions || {}, rn = 0;
+      for (k in regions){ if (regions[k]) rn++; }
+      if (rn) html += chip('참가 지역', rn + '곳');
+      sum.innerHTML = html;
     })
     .catch(offline);
 })();
