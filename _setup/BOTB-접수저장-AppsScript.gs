@@ -250,3 +250,65 @@ function 스팸차단_테스트() {
   };
   Logger.log(JSON.stringify(spamCheck_(p)));   // spam: true 가 나와야 정상
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   ★ 한 번만 실행하세요 — 명단 정리
+     1) 빈 줄 · 테스트 줄 · 봇 스팸 줄을 스팸 보관 시트로 옮깁니다
+     2) 이메일로만 받아 시트에 빠져 있던 3팀을 넣습니다
+     3) 접수일시 순으로 정렬합니다
+     실행: 편집기 위쪽 함수 목록에서 명단_정리하기 선택 > 실행
+   ══════════════════════════════════════════════════════════════ */
+var 빠진_3팀 = [
+    ['2026-08-23 14:07', '기타 지역', '혼성부', '크리스 변', '', 'KRIS BYUN', '516-776-0110', 'kris0193@gmail.com', '11 – 15', '미쉘 최', '', 'MICHELLE CHOI', '917-232-7565', 'c.miok@yahoo.com', '11 – 15', '', 'N', '미납', '대기', ''],
+    ['2026-08-23 14:14', '기타 지역', '혼성부', '안 성수', '', 'AHN SUNGSU', '201-995-7800', 'ssa2021nj@gmail.com', '16 – 20', '김 경임', '', 'KIM KYUNG IM', '205-534-9112', 'kyungimk@gmail.com', '16 – 20', '', 'N', '미납', '대기', ''],
+    ['2026-08-25 12:07', 'GA · 조지아', '남성부', '박승원', '', 'Sung won Park', '470-965-8736', 'jaemo8381@gmail.com', '6 – 10', '모재완', '', 'Jae Mo', '678-787-4069', 'jaemo8381@gmail.com', '6 – 10', '', 'N', '미납', '대기', '']
+];
+
+function 명단_정리하기() {
+  var sheet = getSheet_();
+  var last = sheet.getLastRow();
+  var moved = 0, added = 0;
+
+  /* 1) 아래에서 위로 훑으며 가짜 줄을 걷어냅니다 */
+  if (last > 1) {
+    var vals = sheet.getRange(2, 1, last - 1, HEADERS.length).getValues();
+    for (var i = vals.length - 1; i >= 0; i--) {
+      var v = vals[i];
+      var p1 = String(v[3] || '').trim(), p2 = String(v[9] || '').trim();
+      var junk = (!p1 && !p2) || looksRandom_(p1) || looksRandom_(p2) ||
+                 /^test/i.test(p1) || dotTrick_(v[7]);
+      if (junk) {
+        getSpamSheet_().appendRow(v.concat(['정리', '명단_정리하기 로 이동']));
+        sheet.deleteRow(i + 2);
+        moved++;
+      }
+    }
+  }
+
+  /* 2) 이미 있는 팀은 건너뛰고, 빠진 팀만 넣습니다 */
+  last = sheet.getLastRow();
+  var have = {};
+  if (last > 1) {
+    var cur = sheet.getRange(2, 4, last - 1, 1).getValues();
+    for (var j = 0; j < cur.length; j++) have[String(cur[j][0]).replace(/\s/g, '')] = true;
+  }
+  for (var k = 0; k < 빠진_3팀.length; k++) {
+    var r = 빠진_3팀[k];
+    if (have[String(r[3]).replace(/\s/g, '')]) continue;
+    r = r.slice();
+    r[0] = new Date(r[0].replace(/-/g, '/'));
+    sheet.appendRow(r);
+    added++;
+  }
+
+  /* 3) 접수일시 순 정렬 */
+  last = sheet.getLastRow();
+  if (last > 2) sheet.getRange(2, 1, last - 1, HEADERS.length).sort({ column: 1, ascending: true });
+
+  var msg = '정리 완료 — 걷어낸 줄 ' + moved + '건, 새로 넣은 팀 ' + added + '팀, 현재 ' +
+            Math.max(0, sheet.getLastRow() - 1) + '팀';
+  Logger.log(msg);
+  try { SpreadsheetApp.openById(SHEET_ID).toast(msg, 'BOTB 명단 정리', 8); } catch (e) {}
+  return msg;
+}
