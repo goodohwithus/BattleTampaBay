@@ -175,7 +175,6 @@ footer{margin-top:34px;color:var(--muted);font-size:12px;text-align:center;line-
             <th>선수 1</th>
             <th>선수 2</th>
             <th>지역 · 팀</th>
-            <th>부문</th>
             <th>핸디</th>
             <th>요청 사항</th>
             <th>참가비</th>
@@ -183,7 +182,7 @@ footer{margin-top:34px;color:var(--muted);font-size:12px;text-align:center;line-
           </tr>
         </thead>
         <tbody id="rows">
-          <tr><td colspan="9" class="empty">불러오는 중…</td></tr>
+          <tr><td colspan="8" class="empty">불러오는 중…</td></tr>
         </tbody>
       </table>
     </div>
@@ -298,14 +297,17 @@ footer{margin-top:34px;color:var(--muted);font-size:12px;text-align:center;line-
 
     /* 집계 칩 */
     var ch = '', k;
-    for (k in (d.divs || {})) ch += '<span class="chip">' + esc(k) + ' <b>' + d.divs[k] + '팀</b></span>';
-    for (k in (d.regions || {})) ch += '<span class="chip dim">' + esc(k) + ' <b>' + d.regions[k] + '</b></span>';
+    for (k in (d.regions || {})) ch += '<span class="chip">' + esc(k) + ' <b>' + d.regions[k] + '팀</b></span>';
+    var order = ['스크래치 ~ 5', '6 – 10', '11 – 15', '16 – 20', '21 이상'], hc = d.hcps || {};
+    for (var q = 0; q < order.length; q++){
+      if (hc[order[q]]) ch += '<span class="chip dim">핸디 ' + esc(order[q]) + ' <b>' + hc[order[q]] + '명</b></span>';
+    }
     document.getElementById('chips').innerHTML = ch;
 
     /* 표 */
     var body = document.getElementById('rows');
     if (!n){
-      body.innerHTML = '<tr><td colspan="9" class="empty">아직 접수된 팀이 없습니다.</td></tr>';
+      body.innerHTML = '<tr><td colspan="8" class="empty">아직 접수된 팀이 없습니다.</td></tr>';
       document.getElementById('warn').style.display = 'none';
       return;
     }
@@ -317,7 +319,6 @@ footer{margin-top:34px;color:var(--muted);font-size:12px;text-align:center;line-
         '<td>' + player(r.p1) + '</td>' +
         '<td>' + player(r.p2) + '</td>' +
         '<td>' + dash(r.team) + '</td>' +
-        '<td>' + dash(r.div) + '</td>' +
         '<td class="dim" style="font-size:12px">' + dash(r.p1.h) + '<span class="sm">' + esc(r.p2.h || '—') + '</span></td>' +
         '<td style="max-width:220px;font-size:12.5px" class="dim">' + dash(r.note) +
           (r.sponsor === 'Y' ? '<span class="sm" style="color:var(--gold-soft)">스폰서 관심</span>' : '') + '</td>' +
@@ -359,7 +360,7 @@ footer{margin-top:34px;color:var(--muted);font-size:12px;text-align:center;line-
       if (r.p1.m && r.p1.m === r.p2.m) items.push(who + ' — 두 선수 이메일이 같음');
       if (/gmai\.com|gmial\.com|gmail\.co$|hotmial/i.test(r.p1.m + ' ' + r.p2.m))
         items.push(who + ' — 이메일 오타로 보임');
-      if (!r.p1.h || !r.p2.h) items.push(who + ' — 핸디캡 미기재');
+      if (!r.p1.h || !r.p2.h) items.push(who + ' — 핸디캡 미기재 (대진 편성에 필요)');
       if (/기타/.test(r.team)) items.push(who + ' — 소속 지역이 "기타"');
     }
     var box = document.getElementById('warn');
@@ -373,14 +374,14 @@ footer{margin-top:34px;color:var(--muted);font-size:12px;text-align:center;line-
   /* ── CSV 내려받기 ── */
   document.getElementById('csv').addEventListener('click', function(){
     if (!DATA || !DATA.rows) return;
-    var H = ['No','접수일시','지역·팀','부문',
+    var H = ['No','접수일시','지역·팀',
       '선수1 이름','선수1 나이','선수1 영문명','선수1 연락처','선수1 이메일','선수1 핸디',
       '선수2 이름','선수2 나이','선수2 영문명','선수2 연락처','선수2 이메일','선수2 핸디',
       '요청 사항','스폰서','참가비','확정','메모'];
     function q(v){ return '"' + String(v == null ? '' : v).replace(/"/g,'""') + '"'; }
     var L = [H.map(q).join(',')];
     DATA.rows.forEach(function(r, i){
-      L.push([i + 1, r.ts, r.team, r.div,
+      L.push([i + 1, r.ts, r.team,
         r.p1.n, r.p1.a, r.p1.e, r.p1.p, r.p1.m, r.p1.h,
         r.p2.n, r.p2.a, r.p2.e, r.p2.p, r.p2.m, r.p2.h,
         r.note, r.sponsor, r.fee, r.status, r.memo].map(q).join(','));

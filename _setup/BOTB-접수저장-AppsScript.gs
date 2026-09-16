@@ -20,7 +20,7 @@ var FORM_TOKEN = 'botb27-' + (27 * 29).toString(36);   // 신청서 쪽과 같�
 var ADMIN_KEY  = 'tampa27gold';
 
 var HEADERS = [
-  '접수일시', '지역 · 팀', '부문',
+  '접수일시', '지역 · 팀', '부문(2026 이전 접수용)',
   '선수1 이름', '선수1 나이', '선수1 영문명', '선수1 연락처', '선수1 이메일', '선수1 핸디',
   '선수2 이름', '선수2 나이', '선수2 영문명', '선수2 연락처', '선수2 이메일', '선수2 핸디',
   '요청 사항', '스폰서 관심', '참가비', '확정', '메모'
@@ -130,13 +130,15 @@ function doGet(e) {
     var last = sheet.getLastRow();
     var vals = (last > 1) ? sheet.getRange(2, 1, last - 1, HEADERS.length).getValues() : [];
 
-    var rows = [], divs = {}, regions = {};
+    var rows = [], regions = {}, hcps = {};
     for (var i = 0; i < vals.length; i++) {
       var v = vals[i];
       if (!v[3] && !v[9]) continue;
-      var d = String(v[2] || '기타'), rg = String(v[1] || '기타');
-      divs[d] = (divs[d] || 0) + 1;
+      var rg = String(v[1] || '기타');
       regions[rg] = (regions[rg] || 0) + 1;
+      var h1 = String(v[8] || '').trim(), h2 = String(v[14] || '').trim();
+      if (h1) hcps[h1] = (hcps[h1] || 0) + 1;
+      if (h2) hcps[h2] = (hcps[h2] || 0) + 1;
       rows.push({
         no: rows.length + 1,
         ts:   v[0] ? Utilities.formatDate(new Date(v[0]), 'America/New_York', 'yyyy-MM-dd HH:mm') : '',
@@ -156,7 +158,7 @@ function doGet(e) {
       } catch (e2) {}
       return json_({
         ok: true, admin: true, cap: CAP_TEAMS, count: rows.length,
-        divs: divs, regions: regions, spam: spamCount, rows: rows,
+        regions: regions, hcps: hcps, spam: spamCount, rows: rows,
         sheetUrl: 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/edit'
       });
     }
@@ -164,8 +166,8 @@ function doGet(e) {
     /* 열쇠가 틀리면 조용히 공개용으로 내려갑니다 */
     if (p.key) return json_({ ok: false, error: 'AUTH' });
 
-    /* 공개용 — 숫자와 부문 집계만 */
-    return json_({ ok: true, cap: CAP_TEAMS, count: rows.length, divs: divs, regions: regions });
+    /* 공개용 — 팀 수 · 참가 지역 수 · 핸디 분포만 */
+    return json_({ ok: true, cap: CAP_TEAMS, count: rows.length, regions: regions, hcps: hcps });
   } catch (err) {
     return json_({ ok: false, error: String(err) });
   }
@@ -208,8 +210,7 @@ function notify_(p) {
     var subject = '[BOTB 2027 신청] ' + (p.p1name || '') + ' · ' + (p.p2name || '') + ' (' + (p.team || '') + ')';
     var body =
       '새 팀이 등록했습니다.\n\n' +
-      '지역 · 팀 : ' + (p.team || '') + '\n' +
-      '부문      : ' + (p.div || '') + '\n\n' +
+      '지역 · 팀 : ' + (p.team || '') + '\n\n' +
       '[선수 1] ' + (p.p1name || '') + ' / 만 ' + (p.p1age || '') + '세 / ' +
                     (p.p1phone || '') + ' / ' + (p.p1email || '') + ' / 핸디 ' + (p.p1hcp || '-') + '\n' +
       '[선수 2] ' + (p.p2name || '') + ' / 만 ' + (p.p2age || '') + '세 / ' +
@@ -231,7 +232,7 @@ function json_(obj) {
 function 정상접수_테스트() {
   var r = doPost({ parameter: {
     tk: FORM_TOKEN, el: '45000',
-    team: 'FL · 플로리다', div: '남성부',
+    team: 'FL · 플로리다',
     p1name: '테스트일', p1age: '50', p1phone: '000', p1email: 'test1@test.com', p1hcp: '6 – 10',
     p2name: '테스트이', p2age: '50', p2phone: '000', p2email: 'test2@test.com', p2hcp: '11 – 15',
     note: '설치 확인용', sponsor: 'N'
@@ -241,7 +242,7 @@ function 정상접수_테스트() {
 
 function 스팸차단_테스트() {
   var p = {
-    team: 'NY · 뉴욕', div: '남성부',
+    team: 'NY · 뉴욕',
     p1name: 'DHKzlyGwmqpRFWCQJWGKWOVM', p1age: '42', p1phone: '8462999553',
     p1email: 'covo.w.e.q.oqo.c9.29@gmail.com', p1hcp: '스크래치 ~ 5',
     p2name: 'qlCrxvIEqWmVlGlPHalrqws', p2age: '41', p2phone: '6542682600',

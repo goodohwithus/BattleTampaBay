@@ -526,6 +526,9 @@ option{background:var(--navy-800)}
   display:grid;place-items:center;font-family:"IBM Plex Mono",monospace;font-size:11px}
 .player .ph .t{font-family:"Gowun Batang",serif;font-size:15.5px;font-weight:700}
 .player .ph .s{font-size:11px;color:var(--muted);margin-left:auto;font-family:"IBM Plex Mono",monospace;letter-spacing:.08em}
+.divnote{margin:0;border:1px solid var(--line);border-radius:9px;padding:11px 14px;
+  font-size:12.5px;line-height:1.75;color:var(--muted);background:rgba(255,255,255,.02)}
+.divnote b{color:var(--gold-soft);font-weight:500}
 .hp-wrap{position:absolute!important;left:-9999px!important;top:auto!important;width:1px!important;height:1px!important;overflow:hidden!important}
 .pair-note{grid-column:1/-1;border-left:2px solid var(--gold);padding:2px 0 2px 15px;font-size:13.5px;color:var(--muted);line-height:1.7}
 .pair-note b{color:var(--gold-soft)}
@@ -1514,14 +1517,11 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
             </select>
           </div>
           <div class="field">
-            <label for="f-div">참가 부문 <span class="req">*</span></label>
-            <select id="f-div" name="div" required>
-              <option value="">선택해 주세요</option>
-              <option>남성부</option>
-              <option>여성부</option>
-              <option>혼성부</option>
-              <option>시니어부 (1962년 이전 출생)</option>
-            </select>
+            <label>참가 방식</label>
+            <p class="divnote">
+              남녀 · 연령 구분 없이 <b>전 팀이 한 조</b>에서 겨룹니다.
+              대진은 두 분의 핸디캡과 금요일 시드 결정전 성적으로만 갈립니다.
+            </p>
           </div>
 
           <div class="players">
@@ -1548,9 +1548,9 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
                 <input id="p1-email" name="p1email" type="email" autocomplete="email" placeholder="name@email.com" required>
               </div>
               <div class="field">
-                <label for="p1-hcp">핸디캡 · 평균 타수</label>
-                <select id="p1-hcp" name="p1hcp">
-                  <option value="">선택 안 함</option>
+                <label for="p1-hcp">핸디캡 · 평균 타수 <span class="req">*</span></label>
+                <select id="p1-hcp" name="p1hcp" required>
+                  <option value="">선택해 주세요</option>
                   <option>스크래치 ~ 5</option>
                   <option>6 – 10</option>
                   <option>11 – 15</option>
@@ -1583,9 +1583,9 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
                 <input id="p2-email" name="p2email" type="email" placeholder="name@email.com" required>
               </div>
               <div class="field">
-                <label for="p2-hcp">핸디캡 · 평균 타수</label>
-                <select id="p2-hcp" name="p2hcp">
-                  <option value="">선택 안 함</option>
+                <label for="p2-hcp">핸디캡 · 평균 타수 <span class="req">*</span></label>
+                <select id="p2-hcp" name="p2hcp" required>
+                  <option value="">선택해 주세요</option>
                   <option>스크래치 ~ 5</option>
                   <option>6 – 10</option>
                   <option>11 – 15</option>
@@ -1944,12 +1944,11 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
     var fd = new FormData(form);
     var g = function(k){ return (fd.get(k) || '').toString().trim(); };
     var mail = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-    var team = g('team'), div = g('div');
+    var team = g('team');
     var p1 = {n:g('p1name'), a:g('p1age'), e:g('p1eng'), p:g('p1phone'), m:g('p1email'), h:g('p1hcp')};
     var p2 = {n:g('p2name'), a:g('p2age'), e:g('p2eng'), p:g('p2phone'), m:g('p2email'), h:g('p2hcp')};
 
     if (!team){ bad('소속 지역을 선택해 주세요.', 'f-team'); return; }
-    if (!div){ bad('참가 부문을 선택해 주세요.', 'f-div'); return; }
     if (!p1.n){ bad('선수 1의 이름을 입력해 주세요.', 'p1-name'); return; }
     if (!p1.a){ bad('선수 1의 나이를 입력해 주세요.', 'p1-age'); return; }
     if (!p1.p){ bad('선수 1의 연락처를 입력해 주세요.', 'p1-phone'); return; }
@@ -1958,6 +1957,8 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
     if (!p2.a){ bad('파트너의 나이를 입력해 주세요.', 'p2-age'); return; }
     if (!p2.p){ bad('파트너의 연락처를 입력해 주세요.', 'p2-phone'); return; }
     if (!mail.test(p2.m)){ bad('파트너의 이메일 주소를 다시 확인해 주세요.', 'p2-email'); return; }
+    if (!p1.h){ bad('선수 1의 핸디캡을 선택해 주세요. 대진 편성에 필요합니다.', 'p1-hcp'); return; }
+    if (!p2.h){ bad('파트너의 핸디캡을 선택해 주세요. 대진 편성에 필요합니다.', 'p2-hcp'); return; }
     if (p1.n === p2.n){ bad('두 선수의 이름이 같습니다. 파트너 정보를 확인해 주세요.', 'p2-name'); return; }
 
     /* 자동 등록(봇) 차단 — 사람에게는 보이지 않는 칸이 채워졌거나 너무 빨리 제출된 경우 */
@@ -1965,7 +1966,7 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
 
     var data = {
       hp: g('website'), tk: TOKEN, el: String(Date.now() - OPENED),
-      team: team, div: div,
+      team: team,
       p1name: p1.n, p1age: p1.a, p1eng: p1.e, p1phone: p1.p, p1email: p1.m, p1hcp: p1.h,
       p2name: p2.n, p2age: p2.a, p2eng: p2.e, p2phone: p2.p, p2email: p2.m, p2hcp: p2.h,
       note: g('note'), sponsor: (fd.get('sponsor') ? 'Y' : 'N')
@@ -1973,7 +1974,7 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
 
     function mailFallback(reason){
       var L = ['Battle of Tampa Bay 2027 참가 신청','',
-        '소속 지역 · 팀 : ' + team, '참가 부문      : ' + div, '', '[ 선수 1 ]',
+        '소속 지역 · 팀 : ' + team, '', '[ 선수 1 ]',
         '이름     : ' + p1.n, '나이     : ' + p1.a];
       if (p1.e) L.push('영문명   : ' + p1.e);
       L.push('연락처   : ' + p1.p, '이메일   : ' + p1.m);
@@ -2016,7 +2017,7 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
 
     /* 저장 주소가 없을 때 — 메일 프로그램으로 보내기 */
     var L = ['Battle of Tampa Bay 2027 참가 신청','',
-      '소속 지역 · 팀 : ' + team, '참가 부문      : ' + div, '', '[ 선수 1 ]',
+      '소속 지역 · 팀 : ' + team, '', '[ 선수 1 ]',
       '이름     : ' + p1.n, '나이     : ' + p1.a];
     if (p1.e) L.push('영문명   : ' + p1.e);
     L.push('연락처   : ' + p1.p, '이메일   : ' + p1.m);
@@ -2078,11 +2079,14 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
           '아직 등록한 팀이 없습니다. 파트너와 함께 첫 팀으로 이름을 올려주세요.</span>';
         return;
       }
-      var html = '', divs = d.divs || {}, k;
-      for (k in divs){ if (divs[k]) html += chip(k, divs[k] + '팀'); }
-      var regions = d.regions || {}, rn = 0;
+      var html = '', regions = d.regions || {}, k, rn = 0;
       for (k in regions){ if (regions[k]) rn++; }
       if (rn) html += chip('참가 지역', rn + '곳');
+      var order = ['스크래치 ~ 5', '6 – 10', '11 – 15', '16 – 20', '21 이상'];
+      var hcps = d.hcps || {};
+      for (var i = 0; i < order.length; i++){
+        if (hcps[order[i]]) html += chip('핸디 ' + order[i], hcps[order[i]] + '명');
+      }
       sum.innerHTML = html;
     })
     .catch(offline);
