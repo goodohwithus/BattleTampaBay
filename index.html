@@ -526,6 +526,9 @@ option{background:var(--navy-800)}
   display:grid;place-items:center;font-family:"IBM Plex Mono",monospace;font-size:11px}
 .player .ph .t{font-family:"Gowun Batang",serif;font-size:15.5px;font-weight:700}
 .player .ph .s{font-size:11px;color:var(--muted);margin-left:auto;font-family:"IBM Plex Mono",monospace;letter-spacing:.08em}
+.bank{display:inline-block;border:1px solid var(--line-gold);background:rgba(212,175,55,.05);
+  padding:12px 16px;line-height:1.85;font-size:13.5px}
+.bank .mono{font-family:"IBM Plex Mono",monospace;color:var(--gold);letter-spacing:.06em}
 /* 등록 마감 공지 */
 .closed{border:1px solid var(--line-gold);background:linear-gradient(135deg,rgba(212,175,55,.09),rgba(212,175,55,.03));
   padding:30px 32px;margin-bottom:34px;display:flex;gap:26px;align-items:center;flex-wrap:wrap}
@@ -1528,8 +1531,20 @@ footer{border-top:1px solid var(--line);background:var(--navy-900);padding:52px 
           <div class="fv no">항공 · 숙박 · 렌터카 · 사전 라운드 그린피 · 개인 경비</div>
         </div>
         <div class="feerow">
-          <div class="fk">납부</div>
-          <div class="fv">지회별로 모아 보내주시면 됩니다. 계좌와 기한은 각 지회 담당자를 통해 안내드립니다.</div>
+          <div class="fk">납부 계좌</div>
+          <div class="fv">
+            <span class="bank">
+              <b>Metro City Bank</b><br>
+              Routing (ABA) <span class="mono">061120686</span><br>
+              Account <span class="mono">192002137</span><br>
+              <span style="color:var(--muted);font-size:12.5px">예금주 · Korean Golf Association of Florida Inc</span>
+            </span>
+            <span style="display:block;color:var(--muted);font-size:12.5px;line-height:1.75;margin-top:10px">
+              지회별로 모아 보내주시면 확인이 쉽습니다. 입금하신 뒤
+              <a href="mailto:goodohwithus@gmail.com" style="color:var(--gold-soft)">goodohwithus@gmail.com</a> 으로
+              <b style="color:var(--ivory);font-weight:500">지회명과 선수 성함</b>을 알려주시면 대조해 두겠습니다.
+            </span>
+          </div>
         </div>
       </div>
     </div>
