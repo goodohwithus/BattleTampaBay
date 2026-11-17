@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Battle Week 2027 · 사전 라운드 안내</title>
+<style>
+  @page { size: A4 portrait; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 210mm; height: 297mm;
+    font-family: "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    color: #16233A; background: #fff;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .sheet { padding: 11mm 13mm 9mm; height: 297mm; display: flex; flex-direction: column; }
+
+  header {
+    background: linear-gradient(135deg, #0B1B30 0%, #14304F 100%);
+    color: #F2ECDE; border-radius: 3mm; padding: 5.2mm 7mm 5mm;
+    position: relative; overflow: hidden; flex: 0 0 auto;
+  }
+  section, .lead, footer { flex: 0 0 auto; }
+  header::after {
+    content: ""; position: absolute; right: -14mm; top: -14mm;
+    width: 46mm; height: 46mm; border: 1.2mm solid rgba(212,175,55,.22); border-radius: 50%;
+  }
+  .kicker { font-size: 7.4pt; letter-spacing: .32em; color: #D4AF37; font-weight: 500; }
+  h1 { font-size: 19.5pt; font-weight: 800; letter-spacing: -.01em; margin-top: 1.5mm; line-height: 1.1; }
+  .ko { font-size: 10.5pt; color: #C7D4E6; margin-top: 1.8mm; }
+  .when {
+    margin-top: 4mm; padding-top: 3.5mm; border-top: .3mm solid rgba(212,175,55,.3);
+    display: flex; gap: 7mm; font-size: 9pt; color: #EBD292;
+  }
+  .when b { color: #fff; font-weight: 600; }
+
+  .lead {
+    margin-top: 3.8mm; background: #FDF8EC; border-left: 1.1mm solid #D4AF37;
+    padding: 3mm 4mm; font-size: 8.4pt; line-height: 1.6; color: #3A4A60;
+  }
+  .lead b { color: #0B1B30; }
+
+  section { margin-top: 4.2mm; }
+  h2 {
+    font-size: 9.5pt; font-weight: 700; color: #0B1B30; letter-spacing: .02em;
+    padding-bottom: 1.3mm; border-bottom: .5mm solid #D4AF37; margin-bottom: 2.8mm;
+    display: flex; align-items: baseline; gap: 2.5mm;
+  }
+  h2 span { font-size: 7.2pt; color: #7A8CA5; font-weight: 400; letter-spacing: 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 8.6pt; }
+  th { background: #0D2240; color: #fff; font-weight: 500; font-size: 7.6pt;
+       padding: 1.8mm 2.2mm; text-align: left; letter-spacing: .04em; }
+  td { padding: 1.55mm 2.2mm; border-bottom: .2mm solid #DDE4EE; vertical-align: middle; line-height: 1.45; }
+  tr:last-child td { border-bottom: none; }
+  .day { font-weight: 700; color: #0B1B30; white-space: nowrap; }
+  .ven { color: #5A6B82; font-size: 7.9pt; }
+  .pre td { background: #F7FAFD; }
+  .main td { background: #0B1B30; color: #F2ECDE; }
+  .main .day { color: #EBD292; }
+  .main .ven { color: #9FB3CC; }
+  .tag {
+    display: inline-block; font-size: 6.8pt; padding: .5mm 1.8mm; border-radius: 6mm;
+    border: .2mm solid #C9D2DE; color: #5A6B82; white-space: nowrap;
+  }
+  .tag.m { border-color: rgba(212,175,55,.5); color: #EBD292; }
+
+  .cards { display: flex; gap: 2.6mm; }
+  .card {
+    flex: 1; border: .3mm solid #D7DEE9; border-radius: 2mm; padding: 2.5mm 2.8mm; background: #FAFCFF;
+  }
+  .card .t { font-size: 8pt; font-weight: 700; color: #0B1B30; line-height: 1.25; }
+  .card .loc { font-size: 7pt; color: #B8912A; margin-top: .8mm; font-weight: 600; }
+  .card .d { font-size: 7.2pt; color: #44546B; line-height: 1.5; margin-top: 1.4mm; }
+
+  .apply { display: flex; gap: 3mm; }
+  .applybox {
+    width: 54mm; background: #0B1B30; color: #fff; border-radius: 2mm;
+    padding: 3.6mm; text-align: center; display: flex; flex-direction: column; justify-content: center;
+  }
+  .applybox .lab { font-size: 7.2pt; color: #9FB3CC; letter-spacing: .1em; }
+  .applybox .big { font-size: 11.5pt; font-weight: 700; color: #EBD292; margin-top: 1.4mm; line-height: 1.35; }
+  .applybox .sub { font-size: 7.4pt; color: #C7D4E6; margin-top: 1.6mm; line-height: 1.5; }
+  .applyinfo { flex: 1; }
+  .applyinfo td:first-child { width: 20mm; font-weight: 600; color: #0B1B30; }
+  .applyinfo td { font-size: 8pt; }
+
+  .notes { font-size: 7.7pt; color: #44546B; line-height: 1.6; }
+  .notes li { margin-left: 3.6mm; margin-bottom: .7mm; }
+
+  footer {
+    margin-top: auto; padding-top: 3.4mm; border-top: .3mm solid #D7DEE9;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    font-size: 7.8pt; color: #5A6B82;
+  }
+  footer b { color: #0B1B30; }
+  .site { font-size: 9pt; font-weight: 700; color: #B8912A; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <div class="kicker">BATTLE OF TAMPA BAY 2027 · PRE-TOURNAMENT ROUNDS</div>
+    <h1>한국에서 오시는 분들을 위한 일정</h1>
+    <div class="ko">서울이 영하일 때, 탬파는 낮에 반팔입니다</div>
+    <div class="when">
+      <div><b>2027. 1. 24 (일) 도착 ~ 1. 31 (일) 폐회</b></div>
+      <div>사전 라운드 1. 25 ~ 1. 28</div>
+      <div><b>남은 자리 한 팀</b></div>
+    </div>
+  </header>
+
+  <div class="lead">
+    먼 길 오십니다. 그 걸음이 아깝지 않도록 <b>도착하시는 날부터 대회가 끝나는 날까지 여드레를 짜두었습니다.</b>
+    1월 24일 일요일에 탬파에 내리시면 그다음 날부터 바로 공을 치실 수 있습니다.
+    대회 앞의 닷새 동안 플로리다에서 이름난 코스 네 곳을 돕니다.
+    <b>티타임은 저희가 잡아두겠습니다.</b> 숙소와 차편만 준비하시고 그날 코스로 오시면 됩니다.
+  </div>
+
+  <section>
+    <h2>전체 일정 <span>1월 24일 도착 ~ 31일 폐회 · 여드레</span></h2>
+    <table>
+      <thead>
+        <tr><th style="width:24mm">날짜</th><th>코스 · 내용</th><th style="width:34mm">위치</th><th style="width:20mm">구분</th></tr>
+      </thead>
+      <tbody>
+        <tr class="pre">
+          <td class="day">1. 24 (일)</td>
+          <td><b>탬파 도착</b> <span class="ven">· 이날은 쉬십시오. 시차가 있습니다</span></td>
+          <td><span class="ven">Tampa International (TPA)</span></td>
+          <td><span class="tag">도착</span></td>
+        </tr>
+        <tr class="pre">
+          <td class="day">1. 25 (월)</td>
+          <td><b>Cabot Citrus Farms</b><br><span class="ven">최근 새로 지은 코스 · Streamsong 에 도전장을 낸 신흥 강자</span></td>
+          <td><span class="ven">Brooksville · 약 1시간</span></td>
+          <td><span class="tag">사전 라운드</span></td>
+        </tr>
+        <tr class="pre">
+          <td class="day">1. 26 (화)</td>
+          <td><b>Streamsong Golf Resort</b><br><span class="ven">Red · Blue · Black 세 코스 모두 미국 퍼블릭 100대 코스</span></td>
+          <td><span class="ven">Bowling Green · 약 1시간 50분</span></td>
+          <td><span class="tag">사전 라운드</span></td>
+        </tr>
+        <tr class="pre">
+          <td class="day">1. 27 (수)</td>
+          <td><b>Belleair Country Club</b><br><span class="ven">1897년 개장 · 플로리다에서 가장 오래된 골프장 · 도널드 로스 설계</span></td>
+          <td><span class="ven">Belleair · 약 1시간</span></td>
+          <td><span class="tag">사전 라운드</span></td>
+        </tr>
+        <tr class="pre">
+          <td class="day">1. 28 (목)</td>
+          <td><b>Tampa Palms</b> &nbsp;·&nbsp; <b>Hunter's Green 연습 라운드</b><br>
+              <span class="ven">대회 코스를 미리 밟아보는 날입니다</span></td>
+          <td><span class="ven">Tampa · New Tampa</span></td>
+          <td><span class="tag">연습</span></td>
+        </tr>
+        <tr class="main">
+          <td class="day">1. 29 (금)</td>
+          <td><b>Black Diamond Ranch</b> · 시드 결정전 18홀 <span class="ven">(12:00 샷건)</span></td>
+          <td><span class="ven">Lecanto</span></td>
+          <td><span class="tag m">본대회</span></td>
+        </tr>
+        <tr class="main">
+          <td class="day">1. 30 (토)</td>
+          <td><b>Hunter's Green</b> · 1 · 2라운드 <span class="ven">(12:00 / 14:30)</span></td>
+          <td><span class="ven">Tampa</span></td>
+          <td><span class="tag m">본대회</span></td>
+        </tr>
+        <tr class="main">
+          <td class="day">1. 31 (일)</td>
+          <td><b>Hunter's Green</b> · 3 · 4라운드 <span class="ven">(12:00 / 14:30) · 17:00 시상식 · 만찬</span></td>
+          <td><span class="ven">Tampa</span></td>
+          <td><span class="tag m">본대회</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>타주에서 오시는 분들께 <span>이 일정은 한국에서 오시는 분들을 위해 준비했습니다</span></h2>
+    <div class="apply">
+      <div class="applybox">
+        <div class="lab">남은 자리</div>
+        <div class="big">한 팀 · 네 자리</div>
+        <div class="sub">날짜별 세 팀 중 두 팀은 이미 찼습니다<br>goodohwithus@gmail.com</div>
+      </div>
+      <div class="applyinfo">
+        <table>
+          <tr><td>신청</td><td>타주에서 일찍 나오셔서 함께 치고 싶으신 분들은 <b>개인적으로 신청</b>하실 수 있습니다. 성함 · 연락처 · 오실 날짜를 보내주세요.</td></tr>
+          <tr><td>티타임</td><td>운영진이 날짜별로 미리 잡아둡니다. 세 팀 중 <b>두 팀은 찼고 한 팀, 네 자리가 남았습니다.</b></td></tr>
+          <tr><td>비용</td><td>본대회 참가비와 <b>별도</b>이며, 그린피는 <b>각자 현장에서</b> 정산합니다.</td></tr>
+          <tr><td>숙소 · 이동</td><td>각자 준비하시면 됩니다. 같은 날짜에 오시는 분들끼리 렌터카와 숙소를 나누실 수 있게 연결해 드립니다.</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>알아두실 것</h2>
+    <ul class="notes">
+      <li>사전 라운드는 <b>친목 라운드</b>입니다. 순위도 상금도 없습니다. 편하게 치시면 됩니다.</li>
+      <li>1월 탬파는 낮 21~23도, 아침 11~13도입니다. 한국이 한겨울일 때 <b>닷새를 내리 칠 수 있는 곳</b>입니다. 공항은 Tampa International(TPA), 코스 간 이동이 있어 <b>렌터카는 사실상 필수</b>입니다.</li>
+      <li>1월 28일(목) <b>Hunter's Green 연습 라운드</b>는 본선 코스를 미리 밟아보는 자리라, 대회 참가자께 특히 권해 드립니다.</li>
+      <li>닷새를 내리 치고 나면 몸이 풀립니다. 그 몸으로 금요일 첫 홀에 서시면 됩니다.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <div>
+      <b>대회 운영</b> &nbsp; 오명섭 경기위원장 · 박용호 대회 준비위원장<br>
+      <b>문의 · 신청</b> &nbsp; goodohwithus@gmail.com
+    </div>
+    <div style="text-align:right">
+      <div class="site">battletampabay.com</div>
+      <div style="margin-top:.8mm">Battle of Tampa Bay 2027</div>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

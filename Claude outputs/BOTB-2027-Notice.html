@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Battle of Tampa Bay 2027 · 참가 안내</title>
+<style>
+  @page { size: A4 portrait; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 210mm; height: 297mm;
+    font-family: "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    color: #16233A; background: #fff;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .sheet { padding: 11mm 13mm 9mm; height: 297mm; display: flex; flex-direction: column; }
+
+  /* 머리말 */
+  header {
+    background: linear-gradient(135deg, #0B1B30 0%, #14304F 100%);
+    color: #F2ECDE; border-radius: 3mm; padding: 6mm 7mm 5.5mm;
+    position: relative; overflow: hidden;
+  }
+  header::after {
+    content: ""; position: absolute; right: -14mm; top: -14mm;
+    width: 46mm; height: 46mm; border: 1.2mm solid rgba(212,175,55,.22); border-radius: 50%;
+  }
+  .kicker { font-size: 7.4pt; letter-spacing: .32em; color: #D4AF37; font-weight: 500; }
+  h1 { font-size: 23pt; font-weight: 800; letter-spacing: -.01em; margin-top: 1.5mm; line-height: 1.1; }
+  .ko { font-size: 10.5pt; color: #C7D4E6; margin-top: 1.8mm; font-weight: 400; }
+  .when {
+    margin-top: 4mm; padding-top: 3.5mm; border-top: .3mm solid rgba(212,175,55,.3);
+    display: flex; gap: 7mm; font-size: 9pt; color: #EBD292;
+  }
+  .when b { color: #fff; font-weight: 600; }
+
+  /* 섹션 */
+  section { margin-top: 5mm; }
+  h2 {
+    font-size: 9.5pt; font-weight: 700; color: #0B1B30; letter-spacing: .02em;
+    padding-bottom: 1.3mm; border-bottom: .5mm solid #D4AF37; margin-bottom: 2.8mm;
+    display: flex; align-items: baseline; gap: 2.5mm;
+  }
+  h2 span { font-size: 7.2pt; color: #7A8CA5; font-weight: 400; letter-spacing: 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 8.6pt; }
+  th { background: #0D2240; color: #fff; font-weight: 500; font-size: 7.6pt;
+       padding: 1.8mm 2.2mm; text-align: left; letter-spacing: .04em; }
+  td { padding: 1.7mm 2.2mm; border-bottom: .2mm solid #DDE4EE; vertical-align: top; line-height: 1.45; }
+  tr:last-child td { border-bottom: none; }
+  .day { font-weight: 700; color: #0B1B30; white-space: nowrap; }
+  .tm  { font-variant-numeric: tabular-nums; white-space: nowrap; color: #14304F; font-weight: 600; }
+  .ven { color: #5A6B82; font-size: 7.9pt; }
+  tbody tr:nth-child(even) { background: #F5F8FC; }
+
+  /* 경기 방식 */
+  .fmt { display: flex; gap: 3mm; }
+  .card {
+    flex: 1; border: .3mm solid #D7DEE9; border-radius: 2mm; padding: 3mm 3.4mm;
+    background: #FAFCFF;
+  }
+  .card .t { font-size: 8.4pt; font-weight: 700; color: #0B1B30; margin-bottom: 1.4mm; }
+  .card .d { font-size: 7.9pt; color: #44546B; line-height: 1.55; }
+  .card.gold { background: #FDF8EC; border-color: #E3CE96; }
+
+  /* 비용 */
+  .fee { display: flex; gap: 3mm; align-items: stretch; }
+  .feebox {
+    width: 46mm; background: #0B1B30; color: #fff; border-radius: 2mm;
+    padding: 3.5mm; text-align: center; display: flex; flex-direction: column; justify-content: center;
+  }
+  .feebox .lab { font-size: 7.2pt; color: #9FB3CC; letter-spacing: .1em; }
+  .feebox .big { font-size: 20pt; font-weight: 800; color: #EBD292; line-height: 1.15; margin-top: .8mm; }
+  .feebox .sub { font-size: 7.6pt; color: #C7D4E6; margin-top: 1.2mm; }
+  .incl { flex: 1; }
+  .incl table td { font-size: 8.3pt; }
+  .incl td:first-child { width: 17mm; font-weight: 600; color: #0B1B30; }
+  .no { color: #9C2B2B; }
+
+  /* 유의 */
+  .notes { font-size: 7.9pt; color: #44546B; line-height: 1.6; }
+  .notes li { margin-left: 3.6mm; margin-bottom: .7mm; }
+
+  footer {
+    margin-top: auto; padding-top: 4mm; border-top: .3mm solid #D7DEE9;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    font-size: 7.8pt; color: #5A6B82;
+  }
+  footer b { color: #0B1B30; }
+  .site { font-size: 9pt; font-weight: 700; color: #B8912A; letter-spacing: .02em; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <div class="kicker">3RD ANNUAL · ALL-AMERICA KOREAN GOLF TOURNAMENT</div>
+    <h1>Battle of Tampa Bay 2027</h1>
+    <div class="ko">제3회 전미 한인 골프 대회 · 참가 안내</div>
+    <div class="when">
+      <div><b>2027. 1. 29 (금) ~ 1. 31 (일)</b></div>
+      <div>Tampa, Florida</div>
+      <div><b>28개 팀 · 56명</b> 접수 마감</div>
+    </div>
+  </header>
+
+  <section>
+    <h2>일정 <span>세 코스 모두 12시 출발입니다. 늦어도 11시까지 도착해 주세요.</span></h2>
+    <table>
+      <thead>
+        <tr><th style="width:20mm">날짜</th><th style="width:16mm">시각</th><th>내용</th><th style="width:42mm">장소</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="day">1월 29일 (금)</td><td class="tm">12:00</td>
+          <td><b>시드 결정전</b> · 18홀 스트로크 (샷건 스타트)<br>
+              <span class="ven">팀 성적은 두 선수 중 좋은 스코어 — 이 순위로 대진이 정해집니다</span></td>
+          <td>Black Diamond Ranch<br><span class="ven">Lecanto, FL</span></td>
+        </tr>
+        <tr>
+          <td class="day"></td><td class="tm">18:30</td>
+          <td>개회 · 환영 만찬 <span class="ven">(시간 · 장소 추후 확정)</span></td><td><span class="ven">추후 안내</span></td>
+        </tr>
+        <tr>
+          <td class="day">1월 30일 (토)</td><td class="tm">12:00</td>
+          <td><b>1라운드</b> · 9홀 매치플레이</td>
+          <td rowspan="2">Hunter's Green C.C.<br><span class="ven">Tampa, FL</span></td>
+        </tr>
+        <tr>
+          <td class="day"></td><td class="tm">14:30</td>
+          <td><b>2라운드</b> · 9홀 매치플레이 <span class="ven">(약 16:45 종료)</span></td>
+        </tr>
+        <tr>
+          <td class="day">1월 31일 (일)</td><td class="tm">12:00</td>
+          <td><b>3라운드</b> · 9홀 매치플레이</td>
+          <td rowspan="2">Hunter's Green C.C.<br><span class="ven">Tampa, FL</span></td>
+        </tr>
+        <tr>
+          <td class="day"></td><td class="tm">14:30</td>
+          <td><b>4라운드 · 순위 결정전</b> <span class="ven">(약 16:45 종료)</span></td>
+        </tr>
+        <tr>
+          <td class="day"></td><td class="tm">17:00</td>
+          <td><b>시상식 · 폐회 만찬</b> <span class="ven">(약 21:00 마무리)</span></td>
+          <td><span class="ven">코스 클럽하우스</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>경기 방식 <span>2인 1팀 · 9홀 매치플레이 · 남녀 연령 구분 없는 단일 조</span></h2>
+    <div class="fmt">
+      <div class="card gold">
+        <div class="t">9홀 매치 · 9번 홀 카운트백</div>
+        <div class="d">홀마다 팀의 좋은 스코어로 겨룹니다. 9홀까지 동타면 <b>9번 홀부터 거꾸로</b>
+          먼저 이긴 홀이 나온 팀이 승리합니다. 끝까지 뒤집힙니다.</div>
+      </div>
+      <div class="card">
+        <div class="t">두 개 플라이트</div>
+        <div class="d">금요일 성적 <b>1~16위는 챔피언십</b>,
+          <b>17~28위는 챌린저</b>로 나뉘어 각자의 대진에서 겨룹니다.</div>
+      </div>
+      <div class="card">
+        <div class="t">져도 끝까지 칩니다</div>
+        <div class="d">패자전이 있어 <b>28개 팀 전원이 네 라운드</b>를 모두 치르고,
+          1위부터 28위까지 순위를 받습니다.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>참가비 <span>2인 1팀 기준 · 사흘 라운드와 식사가 모두 포함된 금액입니다</span></h2>
+    <div class="fee">
+      <div class="feebox">
+        <div class="lab">참가비 · 1인</div>
+        <div class="big">$700</div>
+        <div class="sub">팀당 $1,400</div>
+      </div>
+      <div class="incl">
+        <table>
+          <tr>
+            <td>포함</td>
+            <td>3일 그린피 (Black Diamond 18홀 · Hunter's Green 2일) ·
+                <b>라운드 중 점심 3회</b> (김밥 · 과일 · 간식) ·
+                금요일 환영 만찬 · 일요일 시상식 만찬 ·
+                기념품 구디백 · 상금 및 시상</td>
+          </tr>
+          <tr>
+            <td class="no">불포함</td>
+            <td class="no">항공 · 숙박 · 렌터카 · 연습 라운드 · 개인 경비</td>
+          </tr>
+          <tr>
+            <td>납부</td>
+            <td>지회별로 모아 보내주시면 됩니다. 계좌와 기한은 각 지회 담당자를 통해 안내드립니다.</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>알아두실 것</h2>
+    <ul class="notes">
+      <li><b>스코어는 Golf Genius로 실시간 입력</b>됩니다. 전체 순위를 현장에서 바로 보실 수 있습니다.</li>
+      <li>사흘 모두 <b>점심은 코스에서 제공</b>됩니다. 김밥과 과일, 간식을 준비할 예정입니다. 따로 챙기지 않으셔도 됩니다.</li>
+      <li>1월 탬파는 낮 21~23도, 아침 11~13도입니다. <b>두께 있는 바람막이 하나</b>면 충분합니다.</li>
+      <li>숙소는 Hunter's Green에서 차로 5분 거리에 세 곳이 모여 있습니다. 코스 간 이동이 있어 <b>렌터카는 사실상 필수</b>입니다.</li>
+      <li>팀 구성은 등록하신 그대로 유지됩니다. 변경이 필요하시면 가능한 한 <b>빨리</b> 알려주세요.</li>
+      <li>성함 · 연락처 · 핸디캡이 아직 비어 있는 분들은 지회 담당자를 통해 꼭 전달해 주세요. 대진 편성에 필요합니다.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <div>
+      <b>대회 운영</b> &nbsp; 오명섭 경기위원장 · 박용호 대회 준비위원장<br>
+      <b>문의</b> &nbsp; goodohwithus@gmail.com
+    </div>
+    <div style="text-align:right">
+      <div class="site">battletampabay.com</div>
+      <div style="margin-top:.8mm">2028년부터 Invitational로 운영됩니다</div>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
